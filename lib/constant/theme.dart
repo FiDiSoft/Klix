@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Color primaryColor = Color(0xff123D59);
-Color secondaryColor = Color(0xffC2D1D9);
-Color baseTextColor = Color(0xff010406);
+Color primaryColor = const Color(0xff123D59);
+Color secondaryColor = const Color(0xffC2D1D9);
+Color baseTextColor = const Color(0xff010406);
+Color whiteBackground = const Color(0x00ffffff);
 
 TextStyle headingStyle = GoogleFonts.poppins(
   color: baseTextColor,
