@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     CircleAvatar(
-                      backgroundColor: primaryColor,
+                      backgroundColor: Colors.transparent,
                       child: IconButton(
                         onPressed: () {
                           showDialog(
@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
                         },
                         icon: const Icon(
                           Icons.exit_to_app,
-                          color: Colors.white,
+                          color: Color(0xff123D59)
                         ),
                       ),
                     ),
