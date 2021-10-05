@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/screen/detail/detail_page.dart';
+import 'package:kumpulin/screen/onboarding/onboarding_page.dart';
 import 'package:kumpulin/widgets/build_button.dart';
 
 class HomePage extends StatelessWidget {
@@ -33,9 +34,29 @@ class HomePage extends StatelessWidget {
                     CircleAvatar(
                       backgroundColor: primaryColor,
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: const Text('Log out '),
+                              content:
+                                  const Text('Are you sure to log out ?'),
+                              actions: [
+                                TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('cancel')),
+                                TextButton(
+                                    onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OnBoardingPage())),
+                                    child: const Text('yes')),
+                              ],
+                            ),
+                          );
+                        },
                         icon: const Icon(
-                          Icons.person,
+                          Icons.exit_to_app,
                           color: Colors.white,
                         ),
                       ),
