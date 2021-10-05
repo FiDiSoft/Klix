@@ -47,8 +47,8 @@ class _DetailPageState extends State<DetailPage> {
                     margin: const EdgeInsets.all(10.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Image.network(
-                        'https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png',
+                      child: Image.asset(
+                        'assets/place.png',
                         fit: BoxFit.cover,
                       ),
                     ),

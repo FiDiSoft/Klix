@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kumpulin/constant/theme.dart';
+import 'package:kumpulin/screen/home/home_page.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({ Key? key }) : super(key: key);
@@ -15,9 +16,7 @@ class OnBoardingPage extends StatelessWidget {
               child: Column(
                 children: [
                   Text("Kumpul-in", style: headingStyle.copyWith(color: primaryColor, fontWeight: FontWeight.bold)),
-                  Center(
-                    child: Text('Grab Picture App', style: bodyTextStyle.copyWith(color: secondaryColor, fontSize: 24)),
-                  ),
+                  Text('Grab Picture App', style: bodyTextStyle.copyWith(color: secondaryColor, fontSize: 24)),
                   SizedBox(height: 130),
                   Image.asset('assets/logo.png', width: 300,),
                   SizedBox(height: 130,),
@@ -30,7 +29,7 @@ class OnBoardingPage extends StatelessWidget {
                       ),
                       child: TextButton(
                         onPressed: (){
-                  
+                          Navigator.push(context, MaterialPageRoute(builder:  (context) => HomePage()));
                         }, 
                         child: Text('Login', style: bodyTextStyle.copyWith(fontSize: 20, color: Colors.white),)),
                     ),
