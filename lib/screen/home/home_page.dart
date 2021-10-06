@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
         preferredSize: const Size.fromHeight(290),
         child: Container(
           width: mediaQuery.width,
-          height: 260.0,
+          height: 270.0,
           padding: const EdgeInsets.fromLTRB(22.0, 20.0, 22.0, 10.0),
           child: SafeArea(
             child: Column(
@@ -39,26 +39,26 @@ class HomePage extends StatelessWidget {
                             context: context,
                             builder: (_) => AlertDialog(
                               title: const Text('Log out '),
-                              content:
-                                  const Text('Are you sure to log out ?'),
+                              content: const Text('Are you sure to log out ?'),
                               actions: [
                                 TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('cancel')),
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('cancel'),
+                                ),
                                 TextButton(
-                                    onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OnBoardingPage())),
-                                    child: const Text('yes')),
+                                  onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => OnBoardingPage()),
+                                  ),
+                                  child: const Text('yes'),
+                                ),
                               ],
                             ),
                           );
                         },
-                        icon: const Icon(
-                          Icons.exit_to_app,
-                          color: Color(0xff123D59)
-                        ),
+                        icon: const Icon(Icons.exit_to_app,
+                            color: Color(0xff123D59)),
                       ),
                     ),
                   ],
