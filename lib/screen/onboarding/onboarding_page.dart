@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kumpulin/constant/theme.dart';
-import 'package:kumpulin/screen/home/home_page.dart';
+import 'package:kumpulin/models/google_auth.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({Key? key}) : super(key: key);
@@ -12,7 +12,7 @@ class OnBoardingPage extends StatelessWidget {
       child: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 50),
+            padding: const EdgeInsets.symmetric(vertical: 50),
             child: Column(
               children: [
                 Text("Kumpul-in",
@@ -21,12 +21,12 @@ class OnBoardingPage extends StatelessWidget {
                 Text('Grab Picture App',
                     style: bodyTextStyle.copyWith(
                         color: secondaryColor, fontSize: 24)),
-                SizedBox(height: 130),
+                const SizedBox(height: 130),
                 Image.asset(
                   'assets/logo.png',
                   width: 300,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 130,
                 ),
                 Container(
@@ -36,28 +36,25 @@ class OnBoardingPage extends StatelessWidget {
                       color: primaryColor,
                       borderRadius: BorderRadius.circular(8)),
                   child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()));
+                      onPressed: () async {
+                        await GoogleAuth.signIn();
                       },
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                        Image.asset(
-                          'assets/google.png',
-                          width: 22,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Login with Google',
-                          style: bodyTextStyle.copyWith(
-                              fontSize: 14, color: Colors.white),
-                        )
-                      ])),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/google.png',
+                              width: 22,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              'Login with Google',
+                              style: bodyTextStyle.copyWith(
+                                  fontSize: 14, color: Colors.white),
+                            )
+                          ])),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(
                   height: 59,
                   width: 238,
@@ -66,21 +63,25 @@ class OnBoardingPage extends StatelessWidget {
                       border: Border.all(color: primaryColor),
                       borderRadius: BorderRadius.circular(8)),
                   child: TextButton(
-                      onPressed: () {},
-                      child:  Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                        Image.asset(
-                          'assets/google.png',
-                          width: 22,
-                        ),
-                        SizedBox(width: 10,),
-                        Text(
-                          'Register with Google',
-                          style: bodyTextStyle.copyWith(
-                              fontSize: 14, color: primaryColor),
-                        )
-                      ])),
+                      onPressed: () async {
+                        await GoogleAuth.signIn();
+                      },
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/google.png',
+                              width: 22,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Register with Google',
+                              style: bodyTextStyle.copyWith(
+                                  fontSize: 14, color: primaryColor),
+                            )
+                          ])),
                 )
               ],
             ),

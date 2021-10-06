@@ -1,11 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:kumpulin/constant/theme.dart';
+import 'package:kumpulin/models/google_auth.dart';
 import 'package:kumpulin/screen/detail/detail_page.dart';
-import 'package:kumpulin/screen/onboarding/onboarding_page.dart';
 import 'package:kumpulin/widgets/build_button.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
+
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -37,28 +44,25 @@ class HomePage extends StatelessWidget {
                         onPressed: () {
                           showDialog(
                             context: context,
-                            builder: (_) => AlertDialog(
+                            builder: (context) => AlertDialog(
                               title: const Text('Log out '),
-                              content:
-                                  const Text('Are you sure to log out ?'),
+                              content: const Text('Are you sure to log out ?'),
                               actions: [
                                 TextButton(
                                     onPressed: () => Navigator.pop(context),
                                     child: const Text('cancel')),
                                 TextButton(
-                                    onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OnBoardingPage())),
+                                    onPressed: () async {
+                                      await GoogleAuth.signOut();
+                                      Navigator.pop(context);
+                                    },
                                     child: const Text('yes')),
                               ],
                             ),
                           );
                         },
-                        icon: const Icon(
-                          Icons.exit_to_app,
-                          color: Color(0xff123D59)
-                        ),
+                        icon: const Icon(Icons.exit_to_app,
+                            color: Color(0xff123D59)),
                       ),
                     ),
                   ],
