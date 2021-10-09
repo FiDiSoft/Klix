@@ -29,11 +29,14 @@ environment:
 dependencies:
   camera: ^0.9.4+1
   cupertino_icons: ^1.0.2
+  firebase_auth: ^3.1.2
+  firebase_core: ^1.7.0
   flutter:
     sdk: flutter
   google_fonts: ^2.1.0
   path: ^1.8.0
   path_provider: ^2.0.5
+  google_sign_in: ^5.1.1
   provider: ^6.0.1
 
 dev_dependencies:
