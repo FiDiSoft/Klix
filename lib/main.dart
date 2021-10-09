@@ -7,6 +7,7 @@ import 'package:kumpulin/screen/home/home_page.dart';
 import 'package:kumpulin/screen/onboarding/onboarding_page.dart';
 import 'package:provider/provider.dart';
 
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+
       home: StreamProvider.value(
         value: GoogleAuth.userStream,
         initialData: null,
