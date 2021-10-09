@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kumpulin/constant/theme.dart';
+import 'package:kumpulin/screen/camera/camera_screen.dart';
 import 'package:kumpulin/screen/detail/detail_page.dart';
 import 'package:kumpulin/screen/onboarding/onboarding_page.dart';
 import 'package:kumpulin/widgets/build_button.dart';
@@ -110,7 +111,12 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CameraScreen(),
+          ),
+        ),
         backgroundColor: primaryColor,
         child: const Icon(Icons.add),
       ),
