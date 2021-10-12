@@ -70,6 +70,11 @@ class _CameraScreenState extends State<CameraScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
+                        /**
+                         * * now you can pass this 2 value to another screen, 
+                         * * just call _locationData to get value
+                         * TODO : passing this value to confirm screen
+                         */
                         _locationData = await location.getLocation();
                         print('longtitude : ${_locationData.longitude}');
                         print('lantitude : ${_locationData.latitude}');
