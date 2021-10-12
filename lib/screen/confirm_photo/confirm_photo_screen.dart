@@ -70,7 +70,7 @@ class _ConfrimPhotoScreenState extends State<ConfrimPhotoScreen> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomePage(),
+                          builder: (context) => HomePage(),
                         ),
                       );
                     },
