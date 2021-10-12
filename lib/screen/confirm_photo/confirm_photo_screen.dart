@@ -67,12 +67,7 @@ class _ConfrimPhotoScreenState extends State<ConfrimPhotoScreen> {
                   InkWell(
                     borderRadius: BorderRadius.circular(10.0),
                     onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HomePage(),
-                        ),
-                      );
+                      Navigator.of(context).popUntil((route) => route.isFirst);
                     },
                     child: BuildButton(
                       btnColor: primaryColor,

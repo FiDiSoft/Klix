@@ -36,23 +36,25 @@ class OnBoardingPage extends StatelessWidget {
                       color: primaryColor,
                       borderRadius: BorderRadius.circular(8)),
                   child: TextButton(
-                      onPressed: () async {
-                        await GoogleAuth.signIn();
-                      },
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/google.png',
-                              width: 22,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              'Login with Google',
-                              style: bodyTextStyle.copyWith(
-                                  fontSize: 14, color: Colors.white),
-                            )
-                          ])),
+                    onPressed: () async {
+                      await GoogleAuth.signIn();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/google.png',
+                          width: 22,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          'Login with Google',
+                          style: bodyTextStyle.copyWith(
+                              fontSize: 14, color: Colors.white),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Container(
@@ -63,25 +65,27 @@ class OnBoardingPage extends StatelessWidget {
                       border: Border.all(color: primaryColor),
                       borderRadius: BorderRadius.circular(8)),
                   child: TextButton(
-                      onPressed: () async {
-                        await GoogleAuth.signIn();
-                      },
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/google.png',
-                              width: 22,
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Register with Google',
-                              style: bodyTextStyle.copyWith(
-                                  fontSize: 14, color: primaryColor),
-                            )
-                          ])),
+                    onPressed: () async {
+                      await GoogleAuth.signIn();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/google.png',
+                          width: 22,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'Register with Google',
+                          style: bodyTextStyle.copyWith(
+                              fontSize: 14, color: primaryColor),
+                        )
+                      ],
+                    ),
+                  ),
                 )
               ],
             ),
