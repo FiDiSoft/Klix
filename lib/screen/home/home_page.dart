@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:kumpulin/constant/theme.dart';
-import 'package:kumpulin/screen/camera/camera_screen.dart';
 import 'package:kumpulin/models/google_auth.dart';
+import 'package:kumpulin/screen/camera/camera_screen.dart';
 import 'package:kumpulin/screen/detail/detail_page.dart';
 import 'package:kumpulin/widgets/build_button.dart';
 
