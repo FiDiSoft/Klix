@@ -4,7 +4,6 @@ import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/screen/camera/camera_screen.dart';
 import 'package:kumpulin/models/google_auth.dart';
 import 'package:kumpulin/screen/detail/detail_page.dart';
-import 'package:kumpulin/screen/onboarding/onboarding_page.dart';
 import 'package:kumpulin/widgets/build_button.dart';
 
 class HomePage extends StatelessWidget {
@@ -49,15 +48,6 @@ class HomePage extends StatelessWidget {
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
                                   child: const Text('cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const OnBoardingPage()),
-                                  ),
-                                  child: const Text('yes'),
                                 ),
                                 TextButton(
                                   onPressed: () async {
