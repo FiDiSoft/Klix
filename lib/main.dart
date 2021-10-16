@@ -2,10 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:kumpulin/models/google_auth.dart';
 import 'package:kumpulin/screen/home/home_page.dart';
 import 'package:kumpulin/screen/onboarding/onboarding_page.dart';
 import 'package:provider/provider.dart';
+
+import 'models/google_auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO : Implement named route for simplify passing data between screen
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: StreamProvider.value(
@@ -34,9 +36,7 @@ class Auth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // User? user = FirebaseAuth.instance.currentUser;
     User? user = Provider.of<User?>(context);
-
-    return (user != null) ? HomePage(user: user) : const OnBoardingPage();
+    return (user != null) ? const HomePage() : const OnBoardingPage();
   }
 }

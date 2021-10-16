@@ -1,18 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/models/google_auth.dart';
+import 'package:kumpulin/screen/camera/camera_screen.dart';
 import 'package:kumpulin/screen/detail/detail_page.dart';
 import 'package:kumpulin/widgets/build_button.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({
     Key? key,
-    required this.user,
   }) : super(key: key);
-
-  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +19,7 @@ class HomePage extends StatelessWidget {
         preferredSize: const Size.fromHeight(290),
         child: Container(
           width: mediaQuery.width,
-          height: 260.0,
+          height: 270.0,
           padding: const EdgeInsets.fromLTRB(22.0, 20.0, 22.0, 10.0),
           child: SafeArea(
             child: Column(
@@ -49,14 +45,16 @@ class HomePage extends StatelessWidget {
                               content: const Text('Are you sure to log out ?'),
                               actions: [
                                 TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('cancel')),
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('cancel'),
+                                ),
                                 TextButton(
-                                    onPressed: () async {
-                                      await GoogleAuth.signOut();
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text('yes')),
+                                  onPressed: () async {
+                                    await GoogleAuth.signOut();
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('yes'),
+                                ),
                               ],
                             ),
                           );
@@ -114,7 +112,12 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CameraScreen(),
+          ),
+        ),
         backgroundColor: primaryColor,
         child: const Icon(Icons.add),
       ),
