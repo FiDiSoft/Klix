@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/db/img_database.dart';
@@ -22,24 +24,22 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    refreshImages();
-
     super.initState();
+    refreshImages();
   }
 
   @override
   void dispose() {
     ImgDatabase.instance.close();
-
     super.dispose();
   }
 
   Future refreshImages() async {
-    setState(() => isLoading = !isLoading);
+    setState(() => isLoading = true);
 
     images = await ImgDatabase.instance.listImg();
 
-    setState(() => isLoading = !isLoading);
+    setState(() => isLoading = false);
   }
 
   @override
@@ -122,7 +122,13 @@ class _HomePageState extends State<HomePage> {
                             onPressed: () => Navigator.pop(context),
                             child: const Text('cancel')),
                         TextButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () async {
+                              await ImgDatabase.instance.deleteAllImg();
+
+                              refreshImages();
+
+                              Navigator.pop(context);
+                            },
                             child: const Text('yes')),
                       ],
                     ),
@@ -144,12 +150,16 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const CameraScreen(),
-          ),
-        ),
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CameraScreen(),
+            ),
+          );
+
+          refreshImages();
+        },
         backgroundColor: primaryColor,
         child: const Icon(Icons.add),
       ),
@@ -165,12 +175,22 @@ class _HomePageState extends State<HomePage> {
                     ),
                   )
                 : GridView.builder(
+                    itemCount: images.length,
                     itemBuilder: (context, index) {
+                      final image = images[index];
+
                       return InkWell(
-                        onTap: () => Navigator.push(
-                            context,
+                        onTap: () async {
+                          await Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => const DetailPage())),
+                              builder: (context) => DetailPage(
+                                image: image,
+                              ),
+                            ),
+                          );
+
+                          refreshImages();
+                        },
                         borderRadius: BorderRadius.circular(10.0),
                         child: Card(
                           margin: const EdgeInsets.all(10.0),
@@ -178,8 +198,8 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(10.0)),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
-                            child: Image.asset(
-                              'assets/place.png',
+                            child: Image.file(
+                              File(image.img),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -195,35 +215,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
-
-
-// body: Container(
-      //   width: mediaQuery.width,
-      //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      //   child: GridView.builder(
-      //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-      //         crossAxisCount: 2),
-      //     itemBuilder: (context, i) {
-      //       return InkWell(
-      //         onTap: () => Navigator.push(context,
-      //             MaterialPageRoute(builder: (_) => const DetailPage())),
-      //         borderRadius: BorderRadius.circular(10.0),
-      //         child: Card(
-      //           margin: const EdgeInsets.all(10.0),
-      //           shape: RoundedRectangleBorder(
-      //               borderRadius: BorderRadius.circular(10.0)),
-      //           child: ClipRRect(
-      //             borderRadius: BorderRadius.circular(10.0),
-      //             child: Image.asset(
-      //               'assets/place.png',
-      //               fit: BoxFit.cover,
-      //             ),
-      //           ),
-      //         ),
-      //       );
-      //     },
-      //     itemCount: 10,
-      //   ),
-      // ),

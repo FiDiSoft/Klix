@@ -1,18 +1,36 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:kumpulin/constant/theme.dart';
+import 'package:kumpulin/db/img_database.dart';
 import 'package:kumpulin/models/form_provider.dart';
+import 'package:kumpulin/models/img.dart';
 import 'package:kumpulin/widgets/build_button.dart';
 import 'package:provider/provider.dart';
 
 class DetailPage extends StatefulWidget {
-  const DetailPage({Key? key}) : super(key: key);
+  const DetailPage({Key? key, required this.image}) : super(key: key);
+
+  final Img image;
 
   @override
   State<DetailPage> createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {
-  TextEditingController descController = TextEditingController(text: '');
+  late String img;
+  late String longitude;
+  late String latitude;
+  late TextEditingController descController;
+
+  @override
+  void initState() {
+    super.initState();
+    descController = TextEditingController(text: widget.image.desc);
+    img = widget.image.img;
+    longitude = widget.image.longitude;
+    latitude = widget.image.latitude;
+  }
 
   @override
   void dispose() {
@@ -22,59 +40,97 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        shadowColor: Colors.transparent,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(
-            Icons.arrow_back,
-            color: primaryColor,
+    return ChangeNotifierProvider<FormProvider>(
+      create: (_) => FormProvider(),
+      child: Consumer<FormProvider>(builder: (_, formProvider, __) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            shadowColor: Colors.transparent,
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(
+                Icons.arrow_back,
+                color: primaryColor,
+              ),
+            ),
+            title: (formProvider.isEdit == false)
+                ? Text(
+                    'Edit Page',
+                    style: headingStyle.copyWith(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                : Text(
+                    'Detail Page',
+                    style: headingStyle.copyWith(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
           ),
-        ),
-      ),
-      body: ChangeNotifierProvider<FormProvider>(
-        create: (_) => FormProvider(),
-        child: Consumer<FormProvider>(builder: (_, formProvider, __) {
-          return SingleChildScrollView(
+          body: SingleChildScrollView(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
               child: Column(
                 children: [
                   Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)),
                     margin: const EdgeInsets.all(10.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Image.asset(
-                        'assets/place.png',
+                      child: Image.file(
+                        File(widget.image.img),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                   const SizedBox(height: 30.0),
-                  SizedBox(
-                    height: 200,
-                    child: TextFormField(
-                      controller: descController,
-                      readOnly: formProvider.isEdit,
-                      expands: true,
-                      maxLines: null,
-                      decoration: InputDecoration(
-                        hintText: 'type something...',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(color: primaryColor)),
+                  TextFormField(
+                    readOnly: formProvider.isEdit,
+                    decoration: const InputDecoration(
+                      hintText: 'type something...',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8),
+                        ),
                       ),
                     ),
+                    maxLines: 5,
+                    controller: descController,
                   ),
                   const SizedBox(height: 30.0),
                   InkWell(
                     borderRadius: BorderRadius.circular(10.0),
-                    onTap: () => formProvider.isEdit = !formProvider.isEdit,
+                    onTap: () {
+                      formProvider.isEdit = !formProvider.isEdit;
+                      final imgPODO = widget.image.copy(
+                          img: img,
+                          longitude: longitude,
+                          latitude: latitude,
+                          desc: descController.text);
+
+                      if (formProvider.isEdit == true) {
+                        ImgDatabase.instance.updateImg(imgPODO);
+
+                        const snackBar = SnackBar(
+                          backgroundColor: Colors.green,
+                          padding: EdgeInsets.all(20),
+                          content: Text(
+                            'Updated successfully!',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          duration: Duration(seconds: 2),
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    },
                     child: BuildButton(
                       btnColor: primaryColor,
                       btnBorder: Border.all(color: primaryColor, width: 1),
@@ -88,7 +144,7 @@ class _DetailPageState extends State<DetailPage> {
                     borderRadius: BorderRadius.circular(10.0),
                     onTap: () => showDialog(
                       context: context,
-                      builder: (_) => AlertDialog(
+                      builder: (context) => AlertDialog(
                         title: const Text('Delete Data'),
                         content: const Text('This action can delete the data'),
                         actions: [
@@ -96,7 +152,12 @@ class _DetailPageState extends State<DetailPage> {
                               onPressed: () => Navigator.pop(context),
                               child: const Text('cancel')),
                           TextButton(
-                              onPressed: () => Navigator.pop(context),
+                              onPressed: () async {
+                                await ImgDatabase.instance
+                                    .deleteImg(widget.image.id!);
+                                Navigator.of(context)
+                                    .popUntil((route) => route.isFirst);
+                              },
                               child: const Text('yes')),
                         ],
                       ),
@@ -115,9 +176,9 @@ class _DetailPageState extends State<DetailPage> {
                 ],
               ),
             ),
-          );
-        }),
-      ),
+          ),
+        );
+      }),
     );
   }
 }
