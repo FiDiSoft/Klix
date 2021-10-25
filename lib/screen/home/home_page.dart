@@ -19,32 +19,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<Img> images;
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    refreshImages();
-  }
-
   @override
   void dispose() {
     ImgDatabase.instance.close();
     super.dispose();
   }
 
-  Future refreshImages() async {
-    setState(() => isLoading = true);
-
-    images = await ImgDatabase.instance.listImg();
-
-    setState(() => isLoading = false);
-  }
-
   @override
   Widget build(BuildContext context) {
     Size mediaQuery = MediaQuery.of(context).size;
+    Future<List<Img>> images = ImgDatabase.instance.listImg();
 
     return Scaffold(
       appBar: PreferredSize(
@@ -125,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                             onPressed: () async {
                               await ImgDatabase.instance.deleteAllImg();
 
-                              refreshImages();
+                              setState(() {});
 
                               Navigator.pop(context);
                             },
@@ -158,59 +142,63 @@ class _HomePageState extends State<HomePage> {
             ),
           );
 
-          refreshImages();
+          setState(() {});
         },
         backgroundColor: primaryColor,
         child: const Icon(Icons.add),
       ),
-      body: Center(
-        child: isLoading
-            ? const CircularProgressIndicator()
-            : images.isEmpty
-                ? const Text(
-                    'No Images',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                    ),
-                  )
-                : GridView.builder(
-                    itemCount: images.length,
-                    itemBuilder: (context, index) {
-                      final image = images[index];
+      body: FutureBuilder<List<Img>>(
+        future: images,
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? snapshot.data!.isEmpty
+                  ? const Center(
+                      child: Text(
+                      'No Images',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    ))
+                  : GridView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final image = snapshot.data![index];
 
-                      return InkWell(
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => DetailPage(
-                                image: image,
+                        return InkWell(
+                          onTap: () async {
+                            await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => DetailPage(
+                                  image: image,
+                                ),
+                              ),
+                            );
+
+                            setState(() {});
+                          },
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Card(
+                            margin: const EdgeInsets.all(10.0),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.file(
+                                File(image.img),
+                                fit: BoxFit.cover,
                               ),
                             ),
-                          );
-
-                          refreshImages();
-                        },
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Card(
-                          margin: const EdgeInsets.all(10.0),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: Image.file(
-                              File(image.img),
-                              fit: BoxFit.cover,
-                            ),
                           ),
-                        ),
-                      );
-                    },
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                    ),
-                  ),
+                        );
+                      },
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                    )
+              : const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }
