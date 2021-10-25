@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/db/img_database.dart';
@@ -17,34 +19,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<Img> images;
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    refreshImages();
-
-    super.initState();
-  }
-
   @override
   void dispose() {
     ImgDatabase.instance.close();
-
     super.dispose();
-  }
-
-  Future refreshImages() async {
-    setState(() => isLoading = !isLoading);
-
-    images = await ImgDatabase.instance.listImg();
-
-    setState(() => isLoading = !isLoading);
   }
 
   @override
   Widget build(BuildContext context) {
     Size mediaQuery = MediaQuery.of(context).size;
+    Future<List<Img>> images = ImgDatabase.instance.listImg();
 
     return Scaffold(
       appBar: PreferredSize(
@@ -122,7 +106,13 @@ class _HomePageState extends State<HomePage> {
                             onPressed: () => Navigator.pop(context),
                             child: const Text('cancel')),
                         TextButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () async {
+                              await ImgDatabase.instance.deleteAllImg();
+
+                              setState(() {});
+
+                              Navigator.pop(context);
+                            },
                             child: const Text('yes')),
                       ],
                     ),
@@ -144,86 +134,72 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const CameraScreen(),
-          ),
-        ),
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CameraScreen(),
+            ),
+          );
+
+          setState(() {});
+        },
         backgroundColor: primaryColor,
         child: const Icon(Icons.add),
       ),
-      body: Center(
-        child: isLoading
-            ? const CircularProgressIndicator()
-            : images.isEmpty
-                ? const Text(
-                    'No Images',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                    ),
-                  )
-                : GridView.builder(
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const DetailPage())),
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Card(
-                          margin: const EdgeInsets.all(10.0),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: Image.asset(
-                              'assets/place.png',
-                              fit: BoxFit.cover,
+      body: FutureBuilder<List<Img>>(
+        future: images,
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? snapshot.data!.isEmpty
+                  ? const Center(
+                      child: Text(
+                      'No Images',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    ))
+                  : GridView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final image = snapshot.data![index];
+
+                        return InkWell(
+                          onTap: () async {
+                            await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => DetailPage(
+                                  image: image,
+                                ),
+                              ),
+                            );
+
+                            setState(() {});
+                          },
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Card(
+                            margin: const EdgeInsets.all(10.0),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.file(
+                                File(image.img),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                    ),
-                  ),
+                        );
+                      },
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                    )
+              : const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }
 }
-
-
-
-
-// body: Container(
-      //   width: mediaQuery.width,
-      //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      //   child: GridView.builder(
-      //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-      //         crossAxisCount: 2),
-      //     itemBuilder: (context, i) {
-      //       return InkWell(
-      //         onTap: () => Navigator.push(context,
-      //             MaterialPageRoute(builder: (_) => const DetailPage())),
-      //         borderRadius: BorderRadius.circular(10.0),
-      //         child: Card(
-      //           margin: const EdgeInsets.all(10.0),
-      //           shape: RoundedRectangleBorder(
-      //               borderRadius: BorderRadius.circular(10.0)),
-      //           child: ClipRRect(
-      //             borderRadius: BorderRadius.circular(10.0),
-      //             child: Image.asset(
-      //               'assets/place.png',
-      //               fit: BoxFit.cover,
-      //             ),
-      //           ),
-      //         ),
-      //       );
-      //     },
-      //     itemCount: 10,
-      //   ),
-      // ),

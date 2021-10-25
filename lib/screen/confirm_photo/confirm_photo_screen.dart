@@ -2,23 +2,29 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:kumpulin/constant/theme.dart';
-import 'package:kumpulin/screen/home/home_page.dart';
+import 'package:kumpulin/db/img_database.dart';
+import 'package:kumpulin/models/img.dart';
+import 'package:kumpulin/screen/camera/camera_screen.dart';
 import 'package:kumpulin/widgets/build_button.dart';
+import 'package:location/location.dart';
 
-class ConfrimPhotoScreen extends StatefulWidget {
+class ConfirmPhotoScreen extends StatefulWidget {
   final String imagePath;
-  const ConfrimPhotoScreen({Key? key, required this.imagePath})
+  final LocationData locationData;
+
+  const ConfirmPhotoScreen(
+      {Key? key, required this.imagePath, required this.locationData})
       : super(key: key);
   @override
-  State<ConfrimPhotoScreen> createState() => _ConfrimPhotoScreenState();
+  State<ConfirmPhotoScreen> createState() => _ConfirmPhotoScreenState();
 }
 
-class _ConfrimPhotoScreenState extends State<ConfrimPhotoScreen> {
-  TextEditingController keteranganController = TextEditingController(text: '');
+class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
+  TextEditingController descController = TextEditingController(text: '');
 
   @override
   void dispose() {
-    keteranganController.dispose();
+    descController.dispose();
     super.dispose();
   }
 
@@ -51,7 +57,7 @@ class _ConfrimPhotoScreenState extends State<ConfrimPhotoScreen> {
                   ),
                   TextFormField(
                     decoration: const InputDecoration(
-                      hintText: 'Isi keterangan',
+                      hintText: 'type something...',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(8),
@@ -59,14 +65,22 @@ class _ConfrimPhotoScreenState extends State<ConfrimPhotoScreen> {
                       ),
                     ),
                     maxLines: 5,
-                    controller: keteranganController,
+                    controller: descController,
                   ),
                   const SizedBox(
                     height: 40,
                   ),
                   InkWell(
                     borderRadius: BorderRadius.circular(10.0),
-                    onTap: () {
+                    onTap: () async {
+                      final imgPODO = Img(
+                          img: widget.imagePath,
+                          longitude: widget.locationData.longitude.toString(),
+                          latitude: widget.locationData.latitude.toString(),
+                          desc: descController.text);
+
+                      await ImgDatabase.instance.addImg(imgPODO);
+
                       Navigator.of(context).popUntil((route) => route.isFirst);
                     },
                     child: BuildButton(
@@ -83,7 +97,11 @@ class _ConfrimPhotoScreenState extends State<ConfrimPhotoScreen> {
                   InkWell(
                     borderRadius: BorderRadius.circular(10.0),
                     onTap: () {
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const CameraScreen(),
+                        ),
+                      );
                     },
                     child: BuildButton(
                       btnColor: whiteBackground,

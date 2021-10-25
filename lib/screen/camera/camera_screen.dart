@@ -58,7 +58,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
     return FutureBuilder(
       future: _initialize,
-      builder: (contex, snapshot) {
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(
             body: Container(
@@ -75,17 +75,19 @@ class _CameraScreenState extends State<CameraScreen> {
                          * * just call _locationData to get value
                          * TODO : passing this value to confirm screen
                          */
-                        _locationData = await location.getLocation();
-                        print('longtitude : ${_locationData.longitude}');
-                        print('lantitude : ${_locationData.latitude}');
+                        // _locationData = await location.getLocation();
+                        // print('longtitude : ${_locationData.longitude}');
+                        // print('lantitude : ${_locationData.latitude}');
 
                         try {
                           await _initialize;
                           final image = await _cameraController.takePicture();
+                          final locationData = await location.getLocation();
                           await Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => ConfrimPhotoScreen(
+                              builder: (context) => ConfirmPhotoScreen(
                                 imagePath: image.path,
+                                locationData: locationData,
                               ),
                             ),
                           );

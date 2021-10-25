@@ -28,33 +28,33 @@ class ImgDatabase {
     const stringType = "VARCHAR NOT NULL";
 
     await db.execute(
-        "CREATE TABLE imgTable (id $idType, image $stringType, longitude $stringType, latitude $stringType)");
+        "CREATE TABLE imgTable (${ImgFields.id} $idType, ${ImgFields.img} $stringType, ${ImgFields.longitude} $stringType, ${ImgFields.latitude} $stringType, ${ImgFields.desc} $stringType)");
   }
 
   Future<List<Img>> listImg() async {
     final db = await instance.database;
 
-    final query = await db.query(imgTable);
+    final query = await db.query(imgTable, orderBy: '${ImgFields.id} DESC');
 
     return query.map((json) => Img.fromJson(json)).toList();
   }
 
-  Future<Img> addImg(Img imgPODO) async {
+  Future<Img> addImg(Img image) async {
     final db = await instance.database;
-    final query = await db.insert(imgTable, imgPODO.toJson());
+    final query = await db.insert(imgTable, image.toJson());
 
-    return imgPODO.copy(id: query);
+    return image.copy(id: query);
   }
 
-  Future<int> updateImg(Img imgPODO) async {
+  Future<int> updateImg(Img image) async {
     final db = await instance.database;
-    final query = await db.update(imgTable, imgPODO.toJson(),
-        where: '${imgPODO.id} = ?', whereArgs: [imgPODO.id]);
+    final query = await db.update(imgTable, image.toJson(),
+        where: '${ImgFields.id} = ?', whereArgs: [image.id]);
 
     return query;
   }
 
-  Future<Img> detailImg(int id) async {
+  Future<Img> readImg(int id) async {
     final db = await instance.database;
     final query = await db.query(
       imgTable,
@@ -76,6 +76,12 @@ class ImgDatabase {
         .delete(imgTable, where: '${ImgFields.id} = ?', whereArgs: [id]);
 
     return query;
+  }
+
+  Future<void> deleteAllImg() async {
+    final db = await instance.database;
+
+    await db.delete(imgTable);
   }
 
   Future close() async {
