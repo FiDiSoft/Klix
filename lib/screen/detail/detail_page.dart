@@ -103,6 +103,9 @@ class _DetailPageState extends State<DetailPage> {
                     controller: descController,
                   ),
                   const SizedBox(height: 30.0),
+                  Text('Longitude : ${widget.image.longitude}'),
+                  Text('Latitude : ${widget.image.latitude}'),
+                  const SizedBox(height: 30.0),
                   InkWell(
                     borderRadius: BorderRadius.circular(10.0),
                     onTap: () {
