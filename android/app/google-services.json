@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "79343727388-3hercb8982m6ja6vgobkbddm2le4cm5i.apps.googleusercontent.com",
+          "client_id": "79343727388-63qc5bi2ippiqolfd8b1i2td4qe5vs24.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.kumpulin",
-            "certificate_hash": "9becba93701ff4ff96d1dff33ab9667c7eee3050"
+            "certificate_hash": "48fef477f7ee82483154749bd2b2ab687b34a35d"
           }
         },
         {
