@@ -1,11 +1,19 @@
 class ImgFields {
-  static final List<String> imgCol = [id, img, longitude, latitude, desc];
+  static final List<String> imgCol = [
+    id,
+    img,
+    longitude,
+    latitude,
+    desc,
+    timeStamps
+  ];
 
   static const String id = '_id';
   static const String img = 'img';
   static const String longitude = 'longitude';
   static const String latitude = 'latitude';
   static const String desc = 'desc';
+  static const String timeStamps = 'time_stamps';
 }
 
 class Img {
@@ -14,6 +22,7 @@ class Img {
   final String longitude;
   final String latitude;
   final String desc;
+  final DateTime timeStamps;
 
   Img({
     this.id,
@@ -21,6 +30,7 @@ class Img {
     required this.longitude,
     required this.latitude,
     required this.desc,
+    required this.timeStamps,
   });
 
   Img copy({
@@ -29,6 +39,7 @@ class Img {
     String? longitude,
     String? latitude,
     String? desc,
+    DateTime? timeStamps,
   }) =>
       Img(
         id: id ?? this.id,
@@ -36,6 +47,7 @@ class Img {
         longitude: longitude ?? this.longitude,
         latitude: latitude ?? this.latitude,
         desc: desc ?? this.desc,
+        timeStamps: timeStamps ?? this.timeStamps,
       );
 
   static Img fromJson(Map<String, dynamic> json) {
@@ -45,6 +57,7 @@ class Img {
       longitude: json[ImgFields.longitude] as String,
       latitude: json[ImgFields.latitude] as String,
       desc: json[ImgFields.desc] as String,
+      timeStamps: DateTime.parse(json[ImgFields.timeStamps] as String),
     );
   }
 
@@ -55,6 +68,7 @@ class Img {
       ImgFields.longitude: longitude,
       ImgFields.latitude: latitude,
       ImgFields.desc: desc,
+      ImgFields.timeStamps: timeStamps.toIso8601String(),
     };
   }
 }
