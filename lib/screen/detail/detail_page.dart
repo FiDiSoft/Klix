@@ -22,14 +22,16 @@ class _DetailPageState extends State<DetailPage> {
   late String longitude;
   late String latitude;
   late TextEditingController descController;
+  late DateTime timeStamps;
 
   @override
   void initState() {
     super.initState();
-    descController = TextEditingController(text: widget.image.desc);
     img = widget.image.img;
     longitude = widget.image.longitude;
     latitude = widget.image.latitude;
+    descController = TextEditingController(text: widget.image.desc);
+    timeStamps = widget.image.timeStamps;
   }
 
   @override
@@ -111,13 +113,15 @@ class _DetailPageState extends State<DetailPage> {
                     onTap: () {
                       formProvider.isEdit = !formProvider.isEdit;
                       final imgPODO = widget.image.copy(
-                          img: img,
-                          longitude: longitude,
-                          latitude: latitude,
-                          desc: descController.text);
+                        img: img,
+                        longitude: longitude,
+                        latitude: latitude,
+                        desc: descController.text,
+                        timeStamps: DateTime.now(),
+                      );
 
                       if (formProvider.isEdit == true) {
-                        ImgDatabase.instance.updateImg(imgPODO);
+                        ImgDatabase.instance.update(imgPODO);
 
                         const snackBar = SnackBar(
                           backgroundColor: Colors.green,
@@ -128,7 +132,7 @@ class _DetailPageState extends State<DetailPage> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
-                          duration: Duration(seconds: 2),
+                          duration: Duration(seconds: 1),
                         );
 
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -157,7 +161,7 @@ class _DetailPageState extends State<DetailPage> {
                           TextButton(
                               onPressed: () async {
                                 await ImgDatabase.instance
-                                    .deleteImg(widget.image.id!);
+                                    .destroy(widget.image.id!);
                                 Navigator.of(context)
                                     .popUntil((route) => route.isFirst);
                               },

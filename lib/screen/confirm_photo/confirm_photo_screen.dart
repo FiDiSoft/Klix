@@ -74,12 +74,14 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                     borderRadius: BorderRadius.circular(10.0),
                     onTap: () async {
                       final imgPODO = Img(
-                          img: widget.imagePath,
-                          longitude: widget.locationData.longitude.toString(),
-                          latitude: widget.locationData.latitude.toString(),
-                          desc: descController.text);
+                        img: widget.imagePath,
+                        longitude: widget.locationData.longitude.toString(),
+                        latitude: widget.locationData.latitude.toString(),
+                        desc: descController.text,
+                        timeStamps: DateTime.now(),
+                      );
 
-                      await ImgDatabase.instance.addImg(imgPODO);
+                      await ImgDatabase.instance.store(imgPODO);
 
                       Navigator.of(context).popUntil((route) => route.isFirst);
                     },
