@@ -6,6 +6,7 @@ import 'package:kumpulin/db/img_database.dart';
 import 'package:kumpulin/models/form_provider.dart';
 import 'package:kumpulin/models/img.dart';
 import 'package:kumpulin/widgets/build_button.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:provider/provider.dart';
 
 class DetailPage extends StatefulWidget {
@@ -142,6 +143,31 @@ class _DetailPageState extends State<DetailPage> {
                       btnColor: primaryColor,
                       btnBorder: Border.all(color: primaryColor, width: 1),
                       btnText: (formProvider.isEdit == false) ? 'Save' : 'Edit',
+                      btnTextStyle: bodyTextStyle.copyWith(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 20.0),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(10.0),
+                    onTap: () async {
+                      final availableMaps = await MapLauncher.installedMaps;
+                      print(
+                          availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
+                      print(double.tryParse(longitude));
+                      await availableMaps.first.showMarker(
+                        coords: Coords(double.tryParse(latitude)!,
+                            double.tryParse(longitude)!),
+                        title: "tempat",
+                      );
+                    },
+                    child: BuildButton(
+                      btnColor: primaryColor,
+                      btnBorder: Border.all(
+                        color: primaryColor,
+                        width: 1,
+                      ),
+                      btnText: 'Cek lokasi',
                       btnTextStyle: bodyTextStyle.copyWith(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
