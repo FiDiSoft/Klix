@@ -81,6 +81,8 @@ class _CameraScreenState extends State<CameraScreen> {
 
                         try {
                           await _initialize;
+                          await location.changeSettings(
+                              accuracy: LocationAccuracy.high);
                           final image = await _cameraController.takePicture();
                           final locationData = await location.getLocation();
                           await Navigator.of(context).push(
