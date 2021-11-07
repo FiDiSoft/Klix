@@ -25,7 +25,8 @@ class MyApp extends StatelessWidget {
       home: StreamProvider.value(
         value: GoogleAuth.userStream,
         initialData: null,
-        child: const Auth(),
+        // child: const Auth(),
+        child: const HomePage(),
       ),
     );
   }
