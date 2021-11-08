@@ -172,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       TextButton(
                                         onPressed: () async {
-                                          await GoogleAuth.signOut();
+                                          await signOut();
                                           Navigator.pop(context);
                                         },
                                         child: const Text('yes'),

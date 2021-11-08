@@ -37,7 +37,7 @@ class OnBoardingPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8)),
                   child: TextButton(
                     onPressed: () async {
-                      await GoogleAuth.signIn();
+                      await signInWithGoogle();
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -66,7 +66,7 @@ class OnBoardingPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8)),
                   child: TextButton(
                     onPressed: () async {
-                      await GoogleAuth.signIn();
+                      await signInWithGoogle();
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

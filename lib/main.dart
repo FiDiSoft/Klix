@@ -23,10 +23,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: StreamProvider.value(
-        value: GoogleAuth.userStream,
+        value: userStream,
         initialData: null,
-        // child: const Auth(),
-        child: const HomePage(),
+        child: const Auth(),
       ),
     );
   }
