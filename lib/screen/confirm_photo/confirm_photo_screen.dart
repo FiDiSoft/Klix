@@ -46,7 +46,7 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Keterangan',
+                    'Deskripsi gambar',
                     style: labelTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -57,7 +57,7 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                   ),
                   TextFormField(
                     decoration: const InputDecoration(
-                      hintText: 'type something...',
+                      hintText: 'Deskripsi gambar...',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(8),
@@ -65,21 +65,25 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                       ),
                     ),
                     maxLines: 5,
+                    maxLength: 1000,
                     controller: descController,
                   ),
-                  const SizedBox(
-                    height: 40,
+                  const Divider(
+                    height: 50.0,
+                    thickness: 1,
                   ),
                   InkWell(
                     borderRadius: BorderRadius.circular(10.0),
                     onTap: () async {
                       final imgPODO = Img(
-                          img: widget.imagePath,
-                          longitude: widget.locationData.longitude.toString(),
-                          latitude: widget.locationData.latitude.toString(),
-                          desc: descController.text);
+                        img: widget.imagePath,
+                        longitude: widget.locationData.longitude.toString(),
+                        latitude: widget.locationData.latitude.toString(),
+                        desc: descController.text,
+                        timeStamps: DateTime.now(),
+                      );
 
-                      await ImgDatabase.instance.addImg(imgPODO);
+                      await ImgDatabase.instance.store(imgPODO);
 
                       Navigator.of(context).popUntil((route) => route.isFirst);
                     },
@@ -97,11 +101,7 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                   InkWell(
                     borderRadius: BorderRadius.circular(10.0),
                     onTap: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => const CameraScreen(),
-                        ),
-                      );
+                      Navigator.pop(context);
                     },
                     child: BuildButton(
                       btnColor: whiteBackground,
