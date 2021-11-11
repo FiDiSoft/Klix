@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/db/img_database.dart';
 import 'package:kumpulin/models/form_provider.dart';
@@ -20,17 +21,17 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   late String img;
-  late String longitude;
-  late String latitude;
   late TextEditingController descController;
+  late TextEditingController latController;
+  late TextEditingController longController;
   late DateTime timeStamps;
 
   @override
   void initState() {
     super.initState();
     img = widget.image.img;
-    longitude = widget.image.longitude;
-    latitude = widget.image.latitude;
+    latController = TextEditingController(text: widget.image.latitude);
+    longController = TextEditingController(text: widget.image.longitude);
     descController = TextEditingController(text: widget.image.desc);
     timeStamps = widget.image.timeStamps;
   }
@@ -38,11 +39,61 @@ class _DetailPageState extends State<DetailPage> {
   @override
   void dispose() {
     descController.dispose();
+    latController.dispose();
+    longController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    openMapsSheet(context) async {
+      try {
+        final coords = Coords(double.parse(latController.text),
+            double.parse(longController.text));
+        const title = "Koordinat gambar";
+        final availableMaps = await MapLauncher.installedMaps;
+
+        showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return SafeArea(
+              child: SingleChildScrollView(
+                child: Container(
+                  child: Wrap(
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.all(10.0),
+                        child: Text(
+                          'Pilih maps',
+                          style: bodyTextStyle.copyWith(fontSize: 20),
+                        ),
+                      ),
+                      const Divider(),
+                      for (var map in availableMaps)
+                        ListTile(
+                          onTap: () => map.showMarker(
+                            coords: coords,
+                            title: title,
+                          ),
+                          title: Text(map.mapName),
+                          leading: SvgPicture.asset(
+                            map.icon,
+                            height: 30.0,
+                            width: 30.0,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      } catch (e) {
+        print(e);
+      }
+    }
+
     return ChangeNotifierProvider<FormProvider>(
       create: (_) => FormProvider(),
       child: Consumer<FormProvider>(builder: (_, formProvider, __) {
@@ -60,14 +111,14 @@ class _DetailPageState extends State<DetailPage> {
             ),
             title: (formProvider.isEdit == false)
                 ? Text(
-                    'Edit Page',
+                    'Halaman edit',
                     style: headingStyle.copyWith(
                       fontSize: 22.0,
                       fontWeight: FontWeight.bold,
                     ),
                   )
                 : Text(
-                    'Detail Page',
+                    'Halaman detail',
                     style: headingStyle.copyWith(
                       fontSize: 22.0,
                       fontWeight: FontWeight.bold,
@@ -95,7 +146,7 @@ class _DetailPageState extends State<DetailPage> {
                   TextFormField(
                     readOnly: formProvider.isEdit,
                     decoration: const InputDecoration(
-                      hintText: 'type something...',
+                      hintText: 'Deskripsi gambar...',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(8),
@@ -103,20 +154,51 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                     maxLines: 5,
+                    maxLength: 1000,
                     controller: descController,
                   ),
-                  const SizedBox(height: 30.0),
-                  Text('Longitude : ${widget.image.longitude}'),
-                  Text('Latitude : ${widget.image.latitude}'),
-                  const SizedBox(height: 30.0),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Latitude',
+                      labelText: 'Latitude',
+                      labelStyle: TextStyle(fontSize: 20),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8),
+                        ),
+                      ),
+                    ),
+                    controller: latController,
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Longitude',
+                      labelText: 'Longitude',
+                      labelStyle: TextStyle(fontSize: 20),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8),
+                        ),
+                      ),
+                    ),
+                    controller: longController,
+                  ),
+                  const Divider(
+                    height: 50.0,
+                    thickness: 1,
+                  ),
                   InkWell(
                     borderRadius: BorderRadius.circular(10.0),
                     onTap: () {
                       formProvider.isEdit = !formProvider.isEdit;
                       final imgPODO = widget.image.copy(
                         img: img,
-                        longitude: longitude,
-                        latitude: latitude,
+                        latitude: latController.text,
+                        longitude: longController.text,
                         desc: descController.text,
                         timeStamps: DateTime.now(),
                       );
@@ -128,7 +210,7 @@ class _DetailPageState extends State<DetailPage> {
                           backgroundColor: Colors.green,
                           padding: EdgeInsets.all(20),
                           content: Text(
-                            'Updated successfully!',
+                            'Berhasil diperbaharui!',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -150,16 +232,8 @@ class _DetailPageState extends State<DetailPage> {
                   const SizedBox(height: 20.0),
                   InkWell(
                     borderRadius: BorderRadius.circular(10.0),
-                    onTap: () async {
-                      final availableMaps = await MapLauncher.installedMaps;
-                      print(
-                          availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
-                      print(double.tryParse(longitude));
-                      await availableMaps.first.showMarker(
-                        coords: Coords(double.tryParse(latitude)!,
-                            double.tryParse(longitude)!),
-                        title: "tempat",
-                      );
+                    onTap: () {
+                      openMapsSheet(context);
                     },
                     child: BuildButton(
                       btnColor: primaryColor,
@@ -178,12 +252,12 @@ class _DetailPageState extends State<DetailPage> {
                     onTap: () => showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: const Text('Delete Data'),
-                        content: const Text('This action can delete the data'),
+                        title: const Text('Hapus Data?'),
+                        content: const Text('klik "ya" untuk melanjutkan'),
                         actions: [
                           TextButton(
                               onPressed: () => Navigator.pop(context),
-                              child: const Text('cancel')),
+                              child: const Text('Kembali')),
                           TextButton(
                               onPressed: () async {
                                 await ImgDatabase.instance
@@ -191,7 +265,7 @@ class _DetailPageState extends State<DetailPage> {
                                 Navigator.of(context)
                                     .popUntil((route) => route.isFirst);
                               },
-                              child: const Text('yes')),
+                              child: const Text('Ya')),
                         ],
                       ),
                     ),
@@ -201,7 +275,7 @@ class _DetailPageState extends State<DetailPage> {
                         color: primaryColor,
                         width: 1,
                       ),
-                      btnText: 'Delete',
+                      btnText: 'Hapus',
                       btnTextStyle: bodyTextStyle.copyWith(
                           color: primaryColor, fontWeight: FontWeight.bold),
                     ),
