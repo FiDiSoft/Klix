@@ -28,7 +28,7 @@ class ImgDatabase {
     const stringType = "VARCHAR NOT NULL";
 
     await db.execute(
-        "CREATE TABLE imgTable (${ImgFields.id} $idType, ${ImgFields.img} $stringType, ${ImgFields.longitude} $stringType, ${ImgFields.latitude} $stringType, ${ImgFields.desc} $stringType, ${ImgFields.timeStamps} $stringType)");
+        "CREATE TABLE imgTable (${ImgFields.id} $idType, ${ImgFields.img} $stringType, ${ImgFields.imgPath} $stringType, ${ImgFields.longitude} $stringType, ${ImgFields.latitude} $stringType, ${ImgFields.desc} $stringType, ${ImgFields.timeStamps} $stringType)");
   }
 
   Future<List<Img>> index() async {

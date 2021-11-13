@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/db/img_database.dart';
+import 'package:kumpulin/helpers/date_now.dart';
 import 'package:kumpulin/models/img.dart';
-import 'package:kumpulin/screen/camera/camera_screen.dart';
 import 'package:kumpulin/widgets/build_button.dart';
 import 'package:location/location.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 class ConfirmPhotoScreen extends StatefulWidget {
   final String imagePath;
@@ -26,6 +29,27 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
   void dispose() {
     descController.dispose();
     super.dispose();
+  }
+
+  void addDataToDatabase() async {
+    final bytes = await File(widget.imagePath).readAsBytes();
+    final dir = await getExternalStorageDirectory();
+    String formatNameImage = "img-$date.jpg";
+    final imgPath = "${dir?.path}/images/$formatNameImage";
+    File(path.join(imgPath))
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(bytes);
+
+    final imgPODO = Img(
+      img: formatNameImage,
+      imgPath: imgPath,
+      longitude: widget.locationData.longitude.toString(),
+      latitude: widget.locationData.latitude.toString(),
+      desc: descController.text,
+      timeStamps: DateTime.now(),
+    );
+
+    await ImgDatabase.instance.store(imgPODO);
   }
 
   @override
@@ -75,16 +99,7 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                   InkWell(
                     borderRadius: BorderRadius.circular(10.0),
                     onTap: () async {
-                      final imgPODO = Img(
-                        img: widget.imagePath,
-                        longitude: widget.locationData.longitude.toString(),
-                        latitude: widget.locationData.latitude.toString(),
-                        desc: descController.text,
-                        timeStamps: DateTime.now(),
-                      );
-
-                      await ImgDatabase.instance.store(imgPODO);
-
+                      addDataToDatabase();
                       Navigator.of(context).popUntil((route) => route.isFirst);
                     },
                     child: BuildButton(
