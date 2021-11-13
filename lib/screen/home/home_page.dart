@@ -169,30 +169,13 @@ class _HomePageState extends State<HomePage> {
               children: [
                 FloatingActionButton(
                   onPressed: () async {
-                    // final db = await ImgDatabase.instance.index();
+                    final db = await ImgDatabase.instance.index();
                     List<LatLng> latLongList = <LatLng>[];
 
-                    // TODO : hapus komen untuk akses latitude dan longitude dari db
-                    // for (var i = 0; i < db.length; i++) {
-                    //   latLongList.add(LatLng(double.parse(db[i].latitude), double.parse(db[i].longitude)));
-                    // }
-
-                    // TODO : Hapus baris berikut saat deployment
-                    List lat = [
-                      -6.175253729981845,
-                      -6.175243063399794,
-                      -6.180163960577149
-                    ];
-
-                    List long = [
-                      106.82710988170494,
-                      106.82213170222003,
-                      106.82043445388793
-                    ];
-
-                    for (var i = 0; i < lat.length; i++) {
-                      latLongList.add(LatLng(lat[i], long[i]));
-                    } // akhir baris
+                    for (var i = 0; i < db.length; i++) {
+                      latLongList.add(LatLng(double.parse(db[i].latitude),
+                          double.parse(db[i].longitude)));
+                    }
 
                     Navigator.push(
                       context,
