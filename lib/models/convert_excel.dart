@@ -7,7 +7,6 @@ import 'package:kumpulin/models/img.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
-
 class ConvertExcel {
   void _addDataToColumnOrRow(
       {required Sheet sheet,
@@ -94,7 +93,7 @@ class ConvertExcel {
 
     var bytesFiles = excel.save();
     var dir = await getExternalStorageDirectories();
-    File(path.join("${dir?[0].path}/output_report.xlsx"))
+    File(path.join("${dir?[0].path}/report/output_report.xlsx"))
       ..createSync(recursive: true)
       ..writeAsBytesSync(bytesFiles!);
   }

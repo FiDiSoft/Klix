@@ -257,7 +257,7 @@ class _HomePageState extends State<HomePage> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10.0),
                                       child: Image.file(
-                                        File(image.img),
+                                        File(image.imgPath),
                                         fit: BoxFit.cover,
                                       ),
                                     ),

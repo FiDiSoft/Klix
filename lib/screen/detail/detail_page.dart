@@ -137,7 +137,7 @@ class _DetailPageState extends State<DetailPage> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: Image.file(
-                        File(widget.image.img),
+                        File(widget.image.imgPath),
                         fit: BoxFit.cover,
                       ),
                     ),

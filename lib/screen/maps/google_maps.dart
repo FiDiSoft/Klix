@@ -146,6 +146,9 @@ class _GoogleMapsState extends State<GoogleMaps> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Titik lokasi'),
+      ),
       body: Stack(
         children: <Widget>[
           // Google Map widget
