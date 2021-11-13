@@ -1,23 +1,28 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/db/img_database.dart';
-import 'package:kumpulin/models/convert_excel.dart';
 import 'package:kumpulin/models/google_auth.dart';
 import 'package:kumpulin/models/img.dart';
 import 'package:kumpulin/models/img_provider.dart';
 import 'package:kumpulin/screen/camera/camera_screen.dart';
 import 'package:kumpulin/screen/detail/detail_page.dart';
 import 'package:kumpulin/screen/maps/google_maps.dart';
+import 'package:kumpulin/screen/send/send_page.dart';
 import 'package:kumpulin/widgets/build_button.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
     Key? key,
+    required this.user,
   }) : super(key: key);
+
+  final User user;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -94,8 +99,11 @@ class _HomePageState extends State<HomePage> {
                       InkWell(
                         borderRadius: BorderRadius.circular(10.0),
                         onTap: () {
-                          final _convertExcel = ConvertExcel();
-                          _convertExcel.generateExcel();
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => SendPage(user: widget.user),
+                            ),
+                          );
                         },
                         child: BuildButton(
                           btnColor: primaryColor,
