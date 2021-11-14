@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:kumpulin/models/img.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -81,7 +82,10 @@ class ImgDatabase {
 
   Future<void> destroyAll() async {
     final db = await instance.database;
-
+    List<Img> listImg = await index();
+    for (var img in listImg) {
+      File(img.imgPath).delete();
+    }
     await db.delete(imgTable);
   }
 

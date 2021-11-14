@@ -1,10 +1,11 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/db/img_database.dart';
-import 'package:kumpulin/helpers/date_now.dart';
+import 'package:kumpulin/constant/date_now.dart';
 import 'package:kumpulin/models/img.dart';
 import 'package:kumpulin/widgets/build_button.dart';
 import 'package:location/location.dart';
@@ -33,8 +34,9 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
 
   Future<void> addDataToDatabase() async {
     final bytes = await File(widget.imagePath).readAsBytes();
+    var randomNumber = Random().nextInt(999999) + 1000000;
     final dir = await getExternalStorageDirectory();
-    String formatNameImage = "img-$date.jpg";
+    String formatNameImage = "img-$randomNumber.jpg";
     final imgPath = "${dir?.path}/images/$formatNameImage";
     File(path.join(imgPath))
       ..createSync(recursive: true)
