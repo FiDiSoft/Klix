@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:archive/archive.dart';
+import 'package:archive/archive_io.dart';
 import 'package:excel/excel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
@@ -71,9 +73,14 @@ class ConvertExcel {
       value: 'LONGITUDE',
       cellStyle: headerCellStyle,
     );
+    // generate zip file
+    var dir = await getExternalStorageDirectory();
+    var encoder = ZipFileEncoder();
+    encoder.create('${dir?.path}/report/images.zip');
     // content data
     List<Img> data = await ImgDatabase.instance.index();
     for (var index = 0; index < data.length; index++) {
+      encoder.addFile(File(data[index].imgPath));
       _addDataToColumnOrRow(
           sheet: sheet,
           cellIndex: "A${index + 5}",
@@ -91,10 +98,9 @@ class ConvertExcel {
           cellIndex: "E${index + 5}",
           value: data[index].longitude);
     }
-
+    encoder.close();
     var bytesFiles = excel.save();
-    var dir = await getExternalStorageDirectories();
-    File(path.join("${dir?[0].path}/output_report.xlsx"))
+    File(path.join("${dir?.path}/report/output_report.xlsx"))
       ..createSync(recursive: true)
       ..writeAsBytesSync(bytesFiles!);
   }

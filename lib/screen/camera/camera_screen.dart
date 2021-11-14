@@ -1,7 +1,11 @@
+import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kumpulin/screen/confirm_photo/confirm_photo_screen.dart';
 import 'package:location/location.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({Key? key}) : super(key: key);
@@ -70,15 +74,6 @@ class _CameraScreenState extends State<CameraScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
-                        /**
-                         * * now you can pass this 2 value to another screen, 
-                         * * just call _locationData to get value
-                         * TODO : passing this value to confirm screen
-                         */
-                        // _locationData = await location.getLocation();
-                        // print('longtitude : ${_locationData.longitude}');
-                        // print('lantitude : ${_locationData.latitude}');
-
                         try {
                           await _initialize;
                           await location.changeSettings(
