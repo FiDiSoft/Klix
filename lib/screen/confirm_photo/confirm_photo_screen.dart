@@ -31,7 +31,7 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
     super.dispose();
   }
 
-  void addDataToDatabase() async {
+  Future<void> addDataToDatabase() async {
     final bytes = await File(widget.imagePath).readAsBytes();
     final dir = await getExternalStorageDirectory();
     String formatNameImage = "img-$date.jpg";
@@ -99,7 +99,7 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                   InkWell(
                     borderRadius: BorderRadius.circular(10.0),
                     onTap: () async {
-                      addDataToDatabase();
+                      await addDataToDatabase();
                       Navigator.of(context).popUntil((route) => route.isFirst);
                     },
                     child: BuildButton(
