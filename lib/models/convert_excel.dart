@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:archive/archive_io.dart';
 import 'package:excel/excel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:kumpulin/db/img_database.dart';
 import 'package:kumpulin/models/img.dart';
@@ -22,14 +23,14 @@ class ConvertExcel {
     curentRow.value = value;
   }
 
-  void generateExcel() async {
+  void generateExcel({required User user}) async {
     final excel = Excel.createExcel();
     final sheet = excel[excel.getDefaultSheet()!];
 
     // additional data
     _addDataToColumnOrRow(sheet: sheet, cellIndex: 'A1', value: 'User email');
     _addDataToColumnOrRow(
-        sheet: sheet, cellIndex: 'B1', value: 'dika1254@gmail.com');
+        sheet: sheet, cellIndex: 'B1', value: '${user.email}');
     String dateNow = DateFormat("yyyy-MM-dd").format(DateTime.now());
     _addDataToColumnOrRow(sheet: sheet, cellIndex: 'A2', value: 'Date');
     _addDataToColumnOrRow(sheet: sheet, cellIndex: 'B2', value: dateNow);
