@@ -22,7 +22,7 @@ Future sendEmail(
 
   final smtpServer = gmailSaslXoauth2('$emailFrom', '$token');
 
-  var dir = await getExternalStorageDirectories();
+  var dir = await getExternalStorageDirectory();
 
   final message = Message()
     ..from = Address('$emailFrom', '${user.displayName}')
@@ -31,7 +31,10 @@ Future sendEmail(
         'Laporan survey dari $emailFrom :: ${DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now())}'
     ..text = 'Laporan tempat survey'
     ..attachments = [
-      FileAttachment(File(path.join("${dir?[0].path}/output_report.xlsx")))
+       FileAttachment(File(path.join("${dir?.path}/report/images.zip")))
+        ..location = Location.inline
+        ..cid = '<myimg@3.141>',
+      FileAttachment(File(path.join("${dir?.path}/report/output_report.xlsx")))
         ..location = Location.inline
         ..cid = '<myimg@3.141>'
     ];
