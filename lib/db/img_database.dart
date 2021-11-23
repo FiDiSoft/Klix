@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:kumpulin/models/img.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -28,7 +29,7 @@ class ImgDatabase {
     const stringType = "VARCHAR NOT NULL";
 
     await db.execute(
-        "CREATE TABLE imgTable (${ImgFields.id} $idType, ${ImgFields.img} $stringType, ${ImgFields.longitude} $stringType, ${ImgFields.latitude} $stringType, ${ImgFields.desc} $stringType, ${ImgFields.timeStamps} $stringType)");
+        "CREATE TABLE imgTable (${ImgFields.id} $idType, ${ImgFields.img} $stringType, ${ImgFields.imgPath} $stringType, ${ImgFields.longitude} $stringType, ${ImgFields.latitude} $stringType, ${ImgFields.desc} $stringType, ${ImgFields.timeStamps} $stringType)");
   }
 
   Future<List<Img>> index() async {
@@ -81,7 +82,10 @@ class ImgDatabase {
 
   Future<void> destroyAll() async {
     final db = await instance.database;
-
+    List<Img> listImg = await index();
+    for (var img in listImg) {
+      File(img.imgPath).delete();
+    }
     await db.delete(imgTable);
   }
 
