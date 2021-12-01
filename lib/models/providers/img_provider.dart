@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:kumpulin/db/img_database.dart';
 
-import 'img.dart';
+import '../img.dart';
 
 class ImgProvider with ChangeNotifier {
   late Future<List<Img>>? _updateImages = ImgDatabase.instance.index();

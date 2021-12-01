@@ -1,11 +1,7 @@
-import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:kumpulin/screen/confirm_photo/confirm_photo_screen.dart';
 import 'package:location/location.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({Key? key}) : super(key: key);
@@ -17,7 +13,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController _cameraController;
   late Future<void> _initialize;
-  late LocationData _locationData;
+  // late LocationData _locationData;
   late Location location = Location();
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
@@ -40,7 +36,7 @@ class _CameraScreenState extends State<CameraScreen> {
     }
 
     var cameras = await availableCameras();
-    _cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+    _cameraController = CameraController(cameras[0], ResolutionPreset.veryHigh);
     await _cameraController.initialize();
   }
 
