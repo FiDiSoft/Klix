@@ -10,7 +10,7 @@ import 'package:kumpulin/models/providers/checked_provider.dart';
 import 'package:kumpulin/widgets/build_button.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:provider/provider.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({Key? key, required this.image}) : super(key: key);
@@ -28,18 +28,24 @@ class _DetailPageState extends State<DetailPage> {
   late TextEditingController longController;
   late DateTime timeStamps;
 
-  // bool isChecked = false;
+  bool isChecked = false;
 
-  // Future<bool> getCheck() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<bool> getCheck() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  //   return prefs.getBool('checkDetail') ?? false;
-  // }
+    return prefs.getBool('${widget.image.id}key') ?? false;
+  }
 
-  // void setCheck(bool value) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setBool('checkDetail', value);
-  // }
+  void setCheck(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('${widget.image.id}key', value);
+  }
+
+  void destroyShared() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.remove('${widget.image.id}key');
+  }
 
   @override
   void initState() {
@@ -49,11 +55,11 @@ class _DetailPageState extends State<DetailPage> {
     longController = TextEditingController(text: widget.image.longitude);
     descController = TextEditingController(text: widget.image.desc);
     timeStamps = widget.image.timeStamps;
-    // getCheck().then((value) {
-    //   isChecked = value;
+    getCheck().then((value) {
+      isChecked = value;
 
-    //   setState(() {});
-    // });
+      setState(() {});
+    });
   }
 
   @override
@@ -264,25 +270,29 @@ class _DetailPageState extends State<DetailPage> {
                       onTap: () async {
                         openMapsSheet(context);
 
-                        // isChecked = !isChecked;
+                        isChecked = !isChecked;
 
-                        // if (isChecked == false) {
-                        //   isChecked = !isChecked;
-                        // } else {
-                        //   isChecked = isChecked;
-                        // }
+                        if (isChecked == false) {
+                          isChecked = !isChecked;
+                        } else {
+                          isChecked = isChecked;
+                        }
 
-                        // setState(() {
-                        //   setCheck(isChecked);
-                        // });
+                        setState(() {
+                          setCheck(isChecked);
+                        });
                       },
                       child: BuildButton(
                         btnColor: primaryColor,
                         btnBorder: Border.all(
-                          color: primaryColor,
+                          color: (isChecked == false)
+                              ? primaryColor
+                              : Colors.green,
                           width: 1,
                         ),
-                        btnText: 'Cek lokasi',
+                        btnText: (isChecked == false)
+                            ? 'Cek lokasi'
+                            : 'Lokasi sudah dicek',
                         btnTextStyle: bodyTextStyle.copyWith(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
@@ -301,6 +311,7 @@ class _DetailPageState extends State<DetailPage> {
                                 child: const Text('Kembali')),
                             TextButton(
                                 onPressed: () async {
+                                  destroyShared();
                                   await ImgDatabase.instance
                                       .destroy(widget.image.id!);
                                   Navigator.of(context)
