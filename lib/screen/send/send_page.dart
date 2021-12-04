@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/models/convert_excel.dart';
 import 'package:kumpulin/models/send_email.dart';
+import 'package:kumpulin/models/validators.dart';
 import 'package:kumpulin/widgets/build_button.dart';
 
 class SendPage extends StatefulWidget {
@@ -56,6 +57,8 @@ class _SendPageState extends State<SendPage> {
             children: [
               TextFormField(
                 controller: emailController,
+                validator: (email) =>
+                    Validators.validateEmail(email: email.toString()),
                 decoration: const InputDecoration(
                   hintText: 'Masukkan email penerima',
                   labelText: 'Email',
