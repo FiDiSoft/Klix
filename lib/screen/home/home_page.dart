@@ -125,7 +125,23 @@ class _HomePageState extends State<HomePage> {
                                         color: Color(0xff123D59)),
                                   ),
                                 ),
-                                const Icon(Icons.more_vert),
+                                InkWell(
+                                  onTap: () {
+                                    showAboutDialog(
+                                      context: context,
+                                      applicationIcon: const FlutterLogo(),
+                                      applicationName: 'About Page App',
+                                      applicationVersion: '0.0.1',
+                                      applicationLegalese: 'Develop by company',
+                                      children: <Widget>[
+                                        const Text('abababababab'),
+                                        const Text('cacacccCc'),
+                                        const Text('sSsSsSasasas'),
+                                      ],
+                                    );
+                                  },
+                                  child: const Icon(Icons.more_vert),
+                                )
                               ],
                             ),
                           ],
