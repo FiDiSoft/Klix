@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:kumpulin/models/providers/checked_provider.dart';
 import 'package:kumpulin/models/providers/img_provider.dart';
+import 'package:kumpulin/view_models/check.dart';
 import 'package:kumpulin/widgets/build_circular_progress.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +17,6 @@ import 'package:kumpulin/screen/detail/detail_page.dart';
 import 'package:kumpulin/screen/maps/google_maps.dart';
 import 'package:kumpulin/screen/send/send_page.dart';
 import 'package:kumpulin/widgets/build_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -33,25 +32,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isChecked = false;
-
-  Future<bool> getCheck() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    return prefs.getBool('check') ?? false;
-  }
-
-  void setCheck(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('check', value);
-  }
+  final check = Check();
 
   @override
   void initState() {
-    getCheck().then((value) {
+    check.getCheck().then((value) {
       isChecked = value;
 
       setState(() {});
     });
+    print('shared awal : ${check.getShared()}');
     super.initState();
   }
 
@@ -104,7 +94,6 @@ class _HomePageState extends State<HomePage> {
                                         ],
                                       )
                                     : const SizedBox(),
-                                const SizedBox(width: 10.0),
                                 CircleAvatar(
                                   backgroundColor: Colors.transparent,
                                   child: IconButton(
@@ -136,6 +125,23 @@ class _HomePageState extends State<HomePage> {
                                         color: Color(0xff123D59)),
                                   ),
                                 ),
+                                InkWell(
+                                  onTap: () {
+                                    showAboutDialog(
+                                      context: context,
+                                      applicationIcon: const FlutterLogo(),
+                                      applicationName: 'About Page App',
+                                      applicationVersion: '0.0.1',
+                                      applicationLegalese: 'Develop by company',
+                                      children: <Widget>[
+                                        const Text('abababababab'),
+                                        const Text('cacacccCc'),
+                                        const Text('sSsSsSasasas'),
+                                      ],
+                                    );
+                                  },
+                                  child: const Icon(Icons.more_vert),
+                                )
                               ],
                             ),
                           ],
@@ -143,13 +149,31 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: 50.0),
                         InkWell(
                           borderRadius: BorderRadius.circular(10.0),
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    SendPage(user: widget.user),
-                              ),
-                            );
+                          onTap: () async {
+                            List<Img> _listImg =
+                                await ImgDatabase.instance.index();
+
+                            if (_listImg.isEmpty) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                backgroundColor: Colors.red,
+                                padding: EdgeInsets.all(20),
+                                content: Text(
+                                  'Silahkan tambahkan gambar!',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                duration: Duration(seconds: 2),
+                              ));
+                            } else {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      SendPage(user: widget.user),
+                                ),
+                              );
+                            }
                           },
                           child: BuildButton(
                             btnColor: primaryColor,
@@ -203,7 +227,8 @@ class _HomePageState extends State<HomePage> {
 
                                           setState(() {
                                             isChecked = false;
-                                            setCheck(isChecked);
+                                            check.setCheck(isChecked);
+                                            check.destroyShared();
                                           });
 
                                           Navigator.pop(context);
@@ -220,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                               color: primaryColor,
                               width: 1,
                             ),
-                            btnText: 'Hapus semua data',
+                            btnText: 'Hapus semua gambar',
                             btnTextStyle: bodyTextStyle.copyWith(
                                 color: primaryColor,
                                 fontWeight: FontWeight.bold),
@@ -277,7 +302,7 @@ class _HomePageState extends State<HomePage> {
                         }
 
                         setState(() {
-                          setCheck(isChecked);
+                          check.setCheck(isChecked);
                         });
 
                         Navigator.push(
@@ -298,7 +323,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () async {
                       setState(() {
                         isChecked = false;
-                        setCheck(isChecked);
+                        check.setCheck(isChecked);
                       });
 
                       List<Img>? totalImg = await _imgProvider.updateImages;
