@@ -149,13 +149,31 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: 50.0),
                         InkWell(
                           borderRadius: BorderRadius.circular(10.0),
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    SendPage(user: widget.user),
-                              ),
-                            );
+                          onTap: () async {
+                            List<Img> _listImg =
+                                await ImgDatabase.instance.index();
+
+                            if (_listImg.isEmpty) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                backgroundColor: Colors.red,
+                                padding: EdgeInsets.all(20),
+                                content: Text(
+                                  'Silahkan tambahkan gambar!',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                duration: Duration(seconds: 2),
+                              ));
+                            } else {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      SendPage(user: widget.user),
+                                ),
+                              );
+                            }
                           },
                           child: BuildButton(
                             btnColor: primaryColor,
