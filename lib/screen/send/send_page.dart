@@ -82,11 +82,11 @@ class _SendPageState extends State<SendPage> {
                 borderRadius: BorderRadius.circular(10.0),
                 onTap: () {
                   if (_formKey.currentState!.validate()) {
-                    // final _convertExcel = ConvertExcel();
-                    // _convertExcel.generateExcel(user: widget.user);
-                    // sendEmail(
-                    //     user: widget.user,
-                    //     emailRecipient: emailController.text);
+                    final _convertExcel = ConvertExcel();
+                    _convertExcel.generateExcel(user: widget.user);
+                    sendEmail(
+                        user: widget.user,
+                        emailRecipient: emailController.text);
 
                     emailController.text = '';
 
