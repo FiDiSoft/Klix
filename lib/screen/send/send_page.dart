@@ -21,6 +21,7 @@ class SendPage extends StatefulWidget {
 
 class _SendPageState extends State<SendPage> {
   late TextEditingController emailController = TextEditingController(text: '');
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -55,17 +56,20 @@ class _SendPageState extends State<SendPage> {
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
           child: Column(
             children: [
-              TextFormField(
-                controller: emailController,
-                validator: (email) =>
-                    Validators.validateEmail(email: email.toString()),
-                decoration: const InputDecoration(
-                  hintText: 'Masukkan email penerima',
-                  labelText: 'Email',
-                  labelStyle: TextStyle(fontSize: 20),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
+              Form(
+                key: _formKey,
+                child: TextFormField(
+                  controller: emailController,
+                  validator: (email) =>
+                      Validators.validateEmail(email: email.toString()),
+                  decoration: const InputDecoration(
+                    hintText: 'Masukkan email penerima',
+                    labelText: 'Email',
+                    labelStyle: TextStyle(fontSize: 20),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8),
+                      ),
                     ),
                   ),
                 ),
@@ -77,27 +81,28 @@ class _SendPageState extends State<SendPage> {
               InkWell(
                 borderRadius: BorderRadius.circular(10.0),
                 onTap: () {
-                  final _convertExcel = ConvertExcel();
-                  _convertExcel.generateExcel(user: widget.user);
-                  sendEmail(
-                      user: widget.user, emailRecipient: emailController.text);
+                  if (_formKey.currentState!.validate()) {
+                    final _convertExcel = ConvertExcel();
+                    _convertExcel.generateExcel(user: widget.user);
+                    sendEmail(
+                        user: widget.user,
+                        emailRecipient: emailController.text);
 
-                  emailController.text = '';
+                    emailController.text = '';
 
-                  Navigator.pop(context);
+                    Navigator.pop(context);
 
-                  const snackBar = SnackBar(
-                    backgroundColor: Colors.green,
-                    padding: EdgeInsets.all(20),
-                    content: Text(
-                      'Data berhasil terkirim!',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                    duration: Duration(seconds: 2),
-                  );
-
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      backgroundColor: Colors.green,
+                      padding: EdgeInsets.all(20),
+                      content: Text(
+                        'Data berhasil terkirim!',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      duration: Duration(seconds: 2),
+                    ));
+                  }
                 },
                 child: BuildButton(
                   btnColor: primaryColor,
