@@ -15,6 +15,7 @@ class SelectedImgProvider extends ChangeNotifier {
 
   void addAll(List<Img> listImg) {
     _listImages.addAll(listImg);
+    _listImages = _listImages.toSet().toList();
     notifyListeners();
   }
 
