@@ -15,7 +15,7 @@ class SendButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(
-        top: 20.0,
+        top: 10.0,
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(10.0),
