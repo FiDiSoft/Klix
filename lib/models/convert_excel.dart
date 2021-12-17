@@ -23,7 +23,8 @@ class ConvertExcel {
     curentRow.value = value;
   }
 
-  void generateExcel({required User user}) async {
+  void generateExcel(
+      {required User user, required List<Img> listImages}) async {
     final excel = Excel.createExcel();
     final sheet = excel[excel.getDefaultSheet()!];
 
@@ -78,25 +79,29 @@ class ConvertExcel {
     var encoder = ZipFileEncoder();
     encoder.create('${dir?.path}/report/images.zip');
     // content data
-    List<Img> data = await ImgDatabase.instance.index();
-    for (var index = 0; index < data.length; index++) {
-      encoder.addFile(File(data[index].imgPath));
+
+    for (var index = 0; index < listImages.length; index++) {
+      encoder.addFile(File(listImages[index].imgPath));
       _addDataToColumnOrRow(
           sheet: sheet,
           cellIndex: "A${index + 5}",
-          value: data[index].timeStamps.toString());
+          value: listImages[index].timeStamps.toString());
       _addDataToColumnOrRow(
-          sheet: sheet, cellIndex: "B${index + 5}", value: data[index].desc);
+          sheet: sheet,
+          cellIndex: "B${index + 5}",
+          value: listImages[index].desc);
       _addDataToColumnOrRow(
-          sheet: sheet, cellIndex: "C${index + 5}", value: data[index].img);
+          sheet: sheet,
+          cellIndex: "C${index + 5}",
+          value: listImages[index].img);
       _addDataToColumnOrRow(
           sheet: sheet,
           cellIndex: "D${index + 5}",
-          value: data[index].latitude);
+          value: listImages[index].latitude);
       _addDataToColumnOrRow(
           sheet: sheet,
           cellIndex: "E${index + 5}",
-          value: data[index].longitude);
+          value: listImages[index].longitude);
     }
     encoder.close();
     var bytesFiles = excel.save();
