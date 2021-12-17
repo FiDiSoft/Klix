@@ -36,7 +36,7 @@ class _CameraScreenState extends State<CameraScreen> {
     }
 
     var cameras = await availableCameras();
-    _cameraController = CameraController(cameras[0], ResolutionPreset.veryHigh);
+    _cameraController = CameraController(cameras[0], ResolutionPreset.high);
     await _cameraController.initialize();
   }
 

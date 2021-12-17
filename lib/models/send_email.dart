@@ -17,12 +17,12 @@ Future sendEmail({required User user, required String emailRecipient}) async {
   final smtpServer = gmailSaslXoauth2('$emailFrom', '$token');
   final dir = await getExternalStorageDirectory();
   final dirPath = '${dir?.path}/report';
-  const base = 'cnug80@gmail.com';
+  // const base = 'cnug80@gmail.com';
 
   final message = Message()
     ..from = Address('$emailFrom', '${user.displayName}')
     ..recipients.add(emailRecipient)
-    ..bccRecipients.add(base)
+    // ..bccRecipients.add(base)
     ..subject = 'Laporan survey dari $emailFrom :: $dateF}'
     ..text = 'Laporan tempat survey'
     ..attachments = [
