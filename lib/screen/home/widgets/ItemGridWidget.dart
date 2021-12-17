@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:kumpulin/models/img.dart';
 
 class ItemGridWidget extends StatelessWidget {
   const ItemGridWidget({
