@@ -8,7 +8,11 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:path_provider/path_provider.dart';
 
-Future sendEmail({required User user, required String emailRecipient}) async {
+Future sendEmail(
+    {required User user,
+    required String emailRecipient,
+    required String imagesZipFileName,
+    required String excellFileName}) async {
   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
   final GoogleSignInAuthentication? googleAuth =
       await googleUser?.authentication;
@@ -23,13 +27,13 @@ Future sendEmail({required User user, required String emailRecipient}) async {
     ..from = Address('$emailFrom', '${user.displayName}')
     ..recipients.add(emailRecipient)
     // ..bccRecipients.add(base)
-    ..subject = 'Laporan survey dari $emailFrom :: $dateF}'
+    ..subject = 'Laporan survey dari $emailFrom :: $dateF'
     ..text = 'Laporan tempat survey'
     ..attachments = [
-      FileAttachment(File(path.join("$dirPath/images.zip")))
+      FileAttachment(File(path.join("$dirPath/$imagesZipFileName")))
         ..location = Location.inline
         ..cid = '<myimg@3.141>',
-      FileAttachment(File(path.join("$dirPath/output_report.xlsx")))
+      FileAttachment(File(path.join("$dirPath/$excellFileName")))
         ..location = Location.inline
         ..cid = '<myimg@3.141>'
     ];

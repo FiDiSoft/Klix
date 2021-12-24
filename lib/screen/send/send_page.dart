@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/models/convert_excel.dart';
@@ -90,12 +91,24 @@ class _SendPageState extends State<SendPage> {
                     borderRadius: BorderRadius.circular(10.0),
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        final _convertExcel = ConvertExcel();
+                        String dateNow =
+                            DateFormat("yyyy-MM-dd").format(DateTime.now());
+                        String? username = widget.user.displayName
+                            ?.replaceAll(RegExp(r"\s+"), "-");
+                        String imagesZipFilename =
+                            "images-$username-$dateNow.zip";
+                        String excellFileName =
+                            "report-$username-$dateNow.xlsx";
+                        final _convertExcel =
+                            ConvertExcel(excellFileName, imagesZipFilename);
                         _convertExcel.generateExcel(
                             user: widget.user, listImages: widget.listImages);
                         sendEmail(
-                            user: widget.user,
-                            emailRecipient: emailController.text);
+                          user: widget.user,
+                          emailRecipient: emailController.text,
+                          excellFileName: imagesZipFilename,
+                          imagesZipFileName: excellFileName,
+                        );
 
                         emailController.text = '';
 
