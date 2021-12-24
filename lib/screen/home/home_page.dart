@@ -50,12 +50,13 @@ class _HomePageState extends State<HomePage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           content: Text(
             title,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold),
           ),
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
         ),
       );
     }
@@ -68,93 +69,100 @@ class _HomePageState extends State<HomePage> {
       child: ChangeNotifierProvider<ImgProvider>(
         create: (context) => ImgProvider(),
         child: Consumer<ImgProvider>(builder: (_, _imgProvider, __) {
+          Future<void> _checkLocation() async {
+            final db = await ImgDatabase.instance.index();
+            List<LatLng> latLongList = <LatLng>[];
+
+            for (var i = 0; i < db.length; i++) {
+              latLongList.add(LatLng(
+                  double.parse(db[i].latitude), double.parse(db[i].longitude)));
+            }
+
+            if (latLongList.isEmpty) {
+              const snackBar = SnackBar(
+                backgroundColor: Colors.red,
+                padding: EdgeInsets.all(20),
+                content: Text(
+                  'Silahkan tambahkan gambar!',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                duration: Duration(seconds: 2),
+              );
+
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            } else {
+              isChecked = !isChecked;
+
+              if (isChecked == false) {
+                isChecked = !isChecked;
+              } else {
+                isChecked = isChecked;
+              }
+
+              setState(() {
+                check.setCheck(isChecked);
+              });
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GoogleMaps(latLong: latLongList),
+                ),
+              );
+            }
+          }
+
+          Future<void> _addImage() async {
+            setState(() {
+              isChecked = false;
+              check.setCheck(isChecked);
+            });
+
+            List<Img>? totalImg = await _imgProvider.updateImages;
+
+            if (totalImg!.length < 50) {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CameraScreen(
+                    user: widget.user,
+                  ),
+                ),
+              );
+
+              _imgProvider.updateImages = ImgDatabase.instance.index();
+            } else {
+              const snackBar = SnackBar(
+                backgroundColor: Colors.red,
+                padding: EdgeInsets.all(20),
+                content: Text(
+                  'Daftar gambar sudah penuh!',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                duration: Duration(seconds: 2),
+              );
+
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
+          }
+
           return Scaffold(
             floatingActionButton: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 FloatingActionButton(
-                  onPressed: () async {
-                    final db = await ImgDatabase.instance.index();
-                    List<LatLng> latLongList = <LatLng>[];
-
-                    for (var i = 0; i < db.length; i++) {
-                      latLongList.add(LatLng(double.parse(db[i].latitude),
-                          double.parse(db[i].longitude)));
-                    }
-
-                    if (latLongList.isEmpty) {
-                      const snackBar = SnackBar(
-                        backgroundColor: Colors.red,
-                        padding: EdgeInsets.all(20),
-                        content: Text(
-                          'Silahkan tambahkan gambar!',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                        duration: Duration(seconds: 2),
-                      );
-
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    } else {
-                      isChecked = !isChecked;
-
-                      if (isChecked == false) {
-                        isChecked = !isChecked;
-                      } else {
-                        isChecked = isChecked;
-                      }
-
-                      setState(() {
-                        check.setCheck(isChecked);
-                      });
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              GoogleMaps(latLong: latLongList),
-                        ),
-                      );
-                    }
-                  },
+                  onPressed: _checkLocation,
                   heroTag: 'gpsButton',
                   backgroundColor: primaryColor,
                   child: const Icon(Icons.gps_fixed),
                 ),
                 const SizedBox(height: 10.0),
                 FloatingActionButton(
-                  onPressed: () async {
-                    setState(() {
-                      isChecked = false;
-                      check.setCheck(isChecked);
-                    });
-
-                    List<Img>? totalImg = await _imgProvider.updateImages;
-
-                    if (totalImg!.length < 50) {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CameraScreen(),
-                        ),
-                      );
-
-                      _imgProvider.updateImages = ImgDatabase.instance.index();
-                    } else {
-                      const snackBar = SnackBar(
-                        backgroundColor: Colors.red,
-                        padding: EdgeInsets.all(20),
-                        content: Text(
-                          'Daftar gambar sudah penuh!',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                        duration: Duration(seconds: 2),
-                      );
-
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                  },
+                  onPressed: _addImage,
                   heroTag: 'addButton',
                   backgroundColor: primaryColor,
                   child: const Icon(Icons.add),
@@ -166,184 +174,174 @@ class _HomePageState extends State<HomePage> {
               builder: (BuildContext context, snapShot) {
                 return Consumer<SelectedImgProvider>(
                   builder: (_, _selectedImgProvider, __) {
-                    return CustomScrollView(
-                      slivers: <Widget>[
-                        // App bar
-                        AppBarWidget(
-                          onPressed: () {
-                            _selectedImgProvider.statusSelect = false;
-                            _selectedImgProvider.removeAll();
-                          },
-                          statusSelected: _selectedImgProvider.isSelectable,
-                          statusCheckLocation: isChecked,
-                        ),
-                        // Button send and delete
-                        SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          sliver: SliverList(
-                            delegate: SliverChildListDelegate(
-                              [
-                                SendButtonWidget(
-                                  onTap: () async {
-                                    List<Img> _listImg =
-                                        await ImgDatabase.instance.index();
-                                    if (_listImg.isEmpty) {
-                                      _showSnackbar(
-                                          'Silahkan tambahkan gambar!');
-                                    } else {
-                                      if (_selectedImgProvider.isSelectable) {
-                                        if (_selectedImgProvider
-                                                .listImages.length >
-                                            0) {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) => SendPage(
-                                                user: widget.user,
-                                                listImages: _selectedImgProvider
-                                                    .listImages,
-                                              ),
-                                            ),
-                                          );
-                                        } else {
-                                          _showSnackbar(
-                                              "Pilih minimal 1 gambar");
-                                        }
-                                      } else {
-                                        _selectedImgProvider.statusSelect =
-                                            true;
-                                      }
-                                    }
-                                  },
-                                  statusSelect:
-                                      _selectedImgProvider.isSelectable,
-                                ),
-                                SendAllAndDeleteButtonWidget(
-                                  onTap: () async {
-                                    if (_selectedImgProvider.isSelectable) {
-                                      _selectedImgProvider
-                                          .addAll(snapShot.data!);
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) => SendPage(
-                                            user: widget.user,
-                                            listImages:
-                                                _selectedImgProvider.listImages,
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          title: const Text(
-                                              'Hapus semua gambar ?'),
-                                          content: const Text(
-                                              'Ini akan menghapus semua gambar'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: const Text('batal'),
-                                            ),
-                                            TextButton(
-                                                onPressed: () async {
-                                                  await ImgDatabase.instance
-                                                      .destroyAll();
-
-                                                  _imgProvider.updateImages =
-                                                      ImgDatabase.instance
-                                                          .index();
-
-                                                  setState(() {
-                                                    isChecked = false;
-                                                    check.setCheck(isChecked);
-                                                    check.destroyShared();
-                                                  });
-
-                                                  Navigator.pop(context);
-                                                },
-                                                child: const Text('ya')),
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                  },
-                                  statusSelect:
-                                      _selectedImgProvider.isSelectable,
-                                ),
-                                if (snapShot.hasData) ...[
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 12),
-                                    child: Center(
-                                      child: Text(
-                                          'Total gambar : ${snapShot.data!.length.toString()} / 50'),
-                                    ),
-                                  ),
-                                ]
-                              ],
+                    // method for SendAll or Delete
+                    Future<void> _sendAllOrDeleteCallback() async {
+                      if (_selectedImgProvider.isSelectable) {
+                        _selectedImgProvider.addAll(snapShot.data!);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SendPage(
+                              user: widget.user,
+                              listImages: _selectedImgProvider.listImages,
                             ),
                           ),
-                        ),
-                        if (snapShot.hasData) ...[
-                          SliverPadding(
-                            padding: const EdgeInsets.only(
-                                left: 12, right: 12, bottom: 32),
-                            sliver: SliverGrid(
-                              delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                final image = snapShot.data![index];
-                                return ItemGridWidget(
-                                  image: image,
-                                  onTap: () async {
-                                    if (_selectedImgProvider.isSelectable) {
-                                      if (_selectedImgProvider.listImages
-                                          .contains(image)) {
-                                        _selectedImgProvider.remove(image);
-                                      } else {
-                                        _selectedImgProvider.add(image);
-                                      }
-                                    } else {
-                                      await Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) => DetailPage(
-                                            image: image,
-                                          ),
-                                        ),
-                                      );
-
-                                      _imgProvider.updateImages =
-                                          ImgDatabase.instance.index();
-                                    }
-                                  },
-                                  selectedImage: _selectedImgProvider.listImages
-                                      .contains(image),
-                                  statusSelected:
-                                      _selectedImgProvider.isSelectable,
-                                );
-                              }, childCount: snapShot.data!.length),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 16,
-                                mainAxisSpacing: 16,
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Hapus semua gambar ?'),
+                            content:
+                                const Text('Ini akan menghapus semua gambar'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('batal'),
                               ),
-                            ),
-                          )
-                        ] else if (snapShot.data!.isEmpty) ...[
-                          const SliverToBoxAdapter(
-                            child: Center(
-                              child: Text(
-                                'No Images',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
+                              TextButton(
+                                onPressed: () async {
+                                  await ImgDatabase.instance.destroyAll();
+
+                                  _imgProvider.updateImages =
+                                      ImgDatabase.instance.index();
+
+                                  setState(() {
+                                    isChecked = false;
+                                    check.setCheck(isChecked);
+                                    check.destroyShared();
+                                  });
+
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('ya'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    }
+
+                    // method send image
+                    Future<void> _sendButtonCallback() async {
+                      List<Img> _listImg = await ImgDatabase.instance.index();
+                      if (_listImg.isEmpty) {
+                        _showSnackbar('Silahkan tambahkan gambar!');
+                      } else {
+                        if (_selectedImgProvider.isSelectable) {
+                          if (_selectedImgProvider.listImages.length > 0) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => SendPage(
+                                  user: widget.user,
+                                  listImages: _selectedImgProvider.listImages,
                                 ),
                               ),
+                            );
+                          } else {
+                            _showSnackbar("Pilih minimal 1 gambar");
+                          }
+                        } else {
+                          _selectedImgProvider.statusSelect = true;
+                        }
+                      }
+                    }
+
+                    return OrientationBuilder(builder: (context, orientation) {
+                      bool isLandscape = orientation == Orientation.landscape;
+                      return CustomScrollView(
+                        slivers: <Widget>[
+                          // App bar
+                          AppBarWidget(
+                            onPressed: () {
+                              _selectedImgProvider.statusSelect = false;
+                              _selectedImgProvider.removeAll();
+                            },
+                            statusSelected: _selectedImgProvider.isSelectable,
+                            statusCheckLocation: isChecked,
+                          ),
+                          // Button send and delete
+                          SliverPadding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            sliver: SliverList(
+                              delegate: SliverChildListDelegate(
+                                [
+                                  SendButtonWidget(
+                                    onTap: _sendButtonCallback,
+                                    statusSelect:
+                                        _selectedImgProvider.isSelectable,
+                                  ),
+                                  SendAllAndDeleteButtonWidget(
+                                    onTap: _sendAllOrDeleteCallback,
+                                    statusSelect:
+                                        _selectedImgProvider.isSelectable,
+                                  ),
+                                  if (snapShot.hasData) ...[
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 12),
+                                      child: Center(
+                                        child: Text(
+                                            'Total gambar : ${snapShot.data!.length.toString()} / 50'),
+                                      ),
+                                    ),
+                                  ]
+                                ],
+                              ),
                             ),
-                          )
-                        ]
-                      ],
-                    );
+                          ),
+                          if (snapShot.hasData) ...[
+                            SliverPadding(
+                              padding: const EdgeInsets.only(
+                                left: 12,
+                                right: 12,
+                                bottom: 32,
+                              ),
+                              sliver: SliverGrid(
+                                delegate: SliverChildBuilderDelegate(
+                                    (BuildContext context, int index) {
+                                  final image = snapShot.data![index];
+                                  return ItemGridWidget(
+                                    image: image,
+                                    onTap: () async {
+                                      if (_selectedImgProvider.isSelectable) {
+                                        if (_selectedImgProvider.listImages
+                                            .contains(image)) {
+                                          _selectedImgProvider.remove(image);
+                                        } else {
+                                          _selectedImgProvider.add(image);
+                                        }
+                                      } else {
+                                        await Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => DetailPage(
+                                              image: image,
+                                            ),
+                                          ),
+                                        );
+
+                                        _imgProvider.updateImages =
+                                            ImgDatabase.instance.index();
+                                      }
+                                    },
+                                    selectedImage: _selectedImgProvider
+                                        .listImages
+                                        .contains(image),
+                                    statusSelected:
+                                        _selectedImgProvider.isSelectable,
+                                  );
+                                }, childCount: snapShot.data!.length),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: isLandscape ? 3 : 2,
+                                  crossAxisSpacing: 16,
+                                  mainAxisSpacing: 16,
+                                ),
+                              ),
+                            )
+                          ]
+                        ],
+                      );
+                    });
                   },
                 );
               },
