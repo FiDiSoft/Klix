@@ -91,8 +91,9 @@ class _SendPageState extends State<SendPage> {
                     borderRadius: BorderRadius.circular(10.0),
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        String dateNow =
-                            DateFormat("yyyy-MM-dd").format(DateTime.now());
+                        String dateNow = DateFormat("yyyy-MM-dd-hh-mm")
+                            .format(DateTime.now());
+                        print(dateNow);
                         String? username = widget.user.displayName
                             ?.replaceAll(RegExp(r"\s+"), "-");
                         String imagesZipFilename =
