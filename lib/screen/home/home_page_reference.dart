@@ -170,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      SendPage(user: widget.user),
+                                      SendPage(user: widget.user, listImages: [],),
                                 ),
                               );
                             }
@@ -401,7 +401,7 @@ class _HomePageState extends State<HomePage> {
                                               BorderRadius.circular(10.0)),
                                       child: ClipRRect(
                                         borderRadius:
-                                            BorderRadius.circular(10.0),
+                                          BorderRadius.circular(10.0),
                                         child: Image.file(
                                           File(image.imgPath),
                                           fit: BoxFit.cover,
