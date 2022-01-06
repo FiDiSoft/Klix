@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/db/img_database.dart';
@@ -59,84 +60,90 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
     Size mediaQuery = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Image.file(
-              File(widget.imagePath),
-            ),
-            Container(
-              width: mediaQuery.width,
-              margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Deskripsi gambar',
-                    style: labelTextStyle.copyWith(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)),
+                    margin: const EdgeInsets.all(10.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Image.file(
+                        File(widget.imagePath),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'Deskripsi gambar...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
+                Container(
+                  width: mediaQuery.width,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Deskripsi gambar',
+                        style: labelTextStyle.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ),
-                    maxLines: 5,
-                    maxLength: 1000,
-                    controller: descController,
-                  ),
-                  const Divider(
-                    height: 50.0,
-                    thickness: 1,
-                  ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(10.0),
-                    onTap: () async {
-                      await addDataToDatabase();
-                      Navigator.of(context).popUntil((route) => route.isFirst);
-                    },
-                    child: BuildButton(
-                      btnColor: primaryColor,
-                      btnBorder: Border.all(color: primaryColor, width: 1),
-                      btnText: 'Simpan',
-                      btnTextStyle: bodyTextStyle.copyWith(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(10.0),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: BuildButton(
-                      btnColor: whiteBackground,
-                      btnBorder: Border.all(
-                        color: primaryColor,
-                        width: 1,
+                      const SizedBox(
+                        height: 10,
                       ),
-                      btnText: 'Hapus',
-                      btnTextStyle: bodyTextStyle.copyWith(
-                          color: primaryColor, fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          hintText: 'Deskripsi gambar...',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
+                        ),
+                        maxLines: 5,
+                        maxLength: 1000,
+                        controller: descController,
+                      ),
+                      const SizedBox(
+                        height: 70,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
-      ),
-    );
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FloatingActionButton.extended(
+                onPressed: () async {
+                  await addDataToDatabase();
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
+                label: const Text('Simpan'),
+                backgroundColor: primaryColor,
+                icon: const Icon(Icons.save),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              FloatingActionButton.extended(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                label: const Text('Hapus'),
+                backgroundColor: Colors.red,
+                icon: const Icon(Icons.delete),
+              ),
+            ],
+          ),
+        ));
   }
 }
