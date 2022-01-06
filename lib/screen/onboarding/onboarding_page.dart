@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/models/google_auth.dart';
+import 'package:lottie/lottie.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({Key? key}) : super(key: key);
@@ -18,16 +19,13 @@ class OnBoardingPage extends StatelessWidget {
                 Text("Kumpul-in",
                     style: headingStyle.copyWith(
                         color: primaryColor, fontWeight: FontWeight.bold)),
-                Text('Grab Picture App',
+                Text('Ambil dan Abadikan Fotomu',
                     style: bodyTextStyle.copyWith(
-                        color: secondaryColor, fontSize: 24)),
-                const SizedBox(height: 130),
-                Image.asset(
-                  'assets/logo.png',
-                  width: 300,
-                ),
+                        color: secondaryColor, fontSize: 16)),
+                const SizedBox(height: 70),
+                Lottie.asset('assets/camera.json', width: 250, height: 250),
                 const SizedBox(
-                  height: 130,
+                  height: 70,
                 ),
                 Container(
                   height: 59,
@@ -48,7 +46,7 @@ class OnBoardingPage extends StatelessWidget {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          'Login with Google',
+                          'Masuk dengan Google',
                           style: bodyTextStyle.copyWith(
                               fontSize: 14, color: Colors.white),
                         )
@@ -79,7 +77,7 @@ class OnBoardingPage extends StatelessWidget {
                           width: 10,
                         ),
                         Text(
-                          'Register with Google',
+                          'Daftar dengan Google',
                           style: bodyTextStyle.copyWith(
                               fontSize: 14, color: primaryColor),
                         )
