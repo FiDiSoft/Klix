@@ -1,16 +1,19 @@
 import 'dart:io';
 
-import 'package:archive/archive.dart';
 import 'package:archive/archive_io.dart';
 import 'package:excel/excel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
-import 'package:kumpulin/db/img_database.dart';
 import 'package:kumpulin/models/img.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
 class ConvertExcel {
+  String imagesZipFilename;
+  String excellFilename;
+
+  ConvertExcel(this.excellFilename, this.imagesZipFilename);
+
   void _addDataToColumnOrRow(
       {required Sheet sheet,
       required String cellIndex,
@@ -77,7 +80,8 @@ class ConvertExcel {
     // generate zip file
     var dir = await getExternalStorageDirectory();
     var encoder = ZipFileEncoder();
-    encoder.create('${dir?.path}/report/images.zip');
+    // TODO : Format file : images-username-tanggal-package-1.zip
+    encoder.create('${dir?.path}/report/$imagesZipFilename');
     // content data
 
     for (var index = 0; index < listImages.length; index++) {
@@ -105,7 +109,7 @@ class ConvertExcel {
     }
     encoder.close();
     var bytesFiles = excel.save();
-    File(path.join("${dir?.path}/report/output_report.xlsx"))
+    File(path.join("${dir?.path}/report/$excellFilename"))
       ..createSync(recursive: true)
       ..writeAsBytesSync(bytesFiles!);
   }

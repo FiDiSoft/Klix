@@ -1,12 +1,11 @@
 import 'dart:io';
-import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/db/img_database.dart';
-import 'package:kumpulin/constant/date_now.dart';
 import 'package:kumpulin/models/img.dart';
 import 'package:kumpulin/widgets/build_button.dart';
 import 'package:location/location.dart';
@@ -16,9 +15,13 @@ import 'package:path/path.dart' as path;
 class ConfirmPhotoScreen extends StatefulWidget {
   final String imagePath;
   final LocationData locationData;
+  final User user;
 
   const ConfirmPhotoScreen(
-      {Key? key, required this.imagePath, required this.locationData})
+      {Key? key,
+      required this.imagePath,
+      required this.locationData,
+      required this.user})
       : super(key: key);
   @override
   State<ConfirmPhotoScreen> createState() => _ConfirmPhotoScreenState();
@@ -26,18 +29,22 @@ class ConfirmPhotoScreen extends StatefulWidget {
 
 class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
   TextEditingController descController = TextEditingController(text: '');
+  ScrollController scrollController = ScrollController();
 
   @override
   void dispose() {
+    scrollController.dispose();
     descController.dispose();
     super.dispose();
   }
 
   Future<void> addDataToDatabase() async {
     final bytes = await File(widget.imagePath).readAsBytes();
-    var randomNumber = Random().nextInt(999999) + 1000000;
+    final dateNow = DateFormat("yyyy-MM-dd-HH-mm-ss").format(DateTime.now());
+    final username = widget.user.displayName?.replaceAll(RegExp(r"\s+"), "-");
     final dir = await getExternalStorageDirectory();
-    String formatNameImage = "img-$randomNumber.jpg";
+    // TODO : Format file : img-username-tanggal-package-1.jpg
+    String formatNameImage = "img-$username-$dateNow.jpg";
     final imgPath = "${dir?.path}/images/$formatNameImage";
     File(path.join(imgPath))
       ..createSync(recursive: true)
@@ -58,7 +65,6 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
   @override
   Widget build(BuildContext context) {
     Size mediaQuery = MediaQuery.of(context).size;
-
     return Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(

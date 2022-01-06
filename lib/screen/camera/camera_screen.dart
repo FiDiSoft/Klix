@@ -1,10 +1,12 @@
 import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kumpulin/screen/confirm_photo/confirm_photo_screen.dart';
 import 'package:location/location.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key? key}) : super(key: key);
+  const CameraScreen({Key? key, required this.user}) : super(key: key);
+  final User user;
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
@@ -54,54 +56,79 @@ class _CameraScreenState extends State<CameraScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size mediaQuery = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
+
+    Future<void> _sendImage() async {
+      try {
+        await _initialize;
+        await location.changeSettings(accuracy: LocationAccuracy.high);
+        final image = await _cameraController.takePicture();
+        final locationData = await location.getLocation();
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ConfirmPhotoScreen(
+              user: widget.user,
+              imagePath: image.path,
+              locationData: locationData,
+            ),
+          ),
+        );
+      } catch (e) {
+        const snackBar = SnackBar(
+          backgroundColor: Colors.red,
+          padding: EdgeInsets.all(20),
+          content: Text(
+            'Mohon ulangi pengambilan gambar',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          duration: Duration(seconds: 2),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    }
 
     return FutureBuilder(
       future: _initialize,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return Scaffold(
-            body: Container(
-              width: mediaQuery.width,
-              color: Colors.black,
-              child: Column(
-                children: [
-                  CameraPreview(_cameraController),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () async {
-                        try {
-                          await _initialize;
-                          await location.changeSettings(
-                              accuracy: LocationAccuracy.high);
-                          final image = await _cameraController.takePicture();
-                          final locationData = await location.getLocation();
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ConfirmPhotoScreen(
-                                imagePath: image.path,
-                                locationData: locationData,
-                              ),
-                            ),
-                          );
-                        } catch (e) {
-                          print(e);
-                        }
-                      },
-                      child: Container(
-                        height: 60,
-                        width: 60,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
+          return OrientationBuilder(builder: (context, orientation) {
+            bool isLandscape = orientation == Orientation.landscape;
+            return Scaffold(
+              body: Container(
+                width: size.width,
+                height: size.height,
+                color: Colors.black,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      child: CameraPreview(_cameraController),
+                    ),
+                    Align(
+                      alignment: isLandscape
+                          ? Alignment.centerRight
+                          : Alignment.bottomCenter,
+                      child: GestureDetector(
+                        onTap: _sendImage,
+                        child: Container(
+                          height: 60,
+                          width: 60,
+                          margin: EdgeInsets.only(
+                            bottom: isLandscape ? 0 : 30,
+                            right: isLandscape ? 30 : 0,
+                          ),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
+            );
+          });
         } else {
           return const Scaffold(
             body: Center(
