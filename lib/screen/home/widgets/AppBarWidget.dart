@@ -79,18 +79,16 @@ class AppBarWidget extends StatelessWidget {
             onPressed: () {
               showAboutDialog(
                 context: context,
-                applicationIcon: const FlutterLogo(),
+                applicationIcon: const Image(image: AssetImage('assets/cipta_logo.jpeg'), width: 75, height: 75,),
                 applicationName: 'About Page App',
                 applicationVersion: '0.0.1',
-                applicationLegalese: 'Develop by company',
+                applicationLegalese: 'Develop by Cipta Teknologi',
                 children: <Widget>[
-                  const Text('abababababab'),
-                  const Text('cacacccCc'),
-                  const Text('sSsSsSasasas'),
+                  const Text('Kumpul-in app is Android-based mobile app. This App is useful to record cordinate location, field image acquisition, and textual description.The information is well-summarized and and can be through email.Hance, makes communication and information sharing become easier in any organization.'),
                 ],
               );
             },
-            icon: const Icon(Icons.more_vert),
+            icon: const Icon(Icons.info_outline),
             color: primaryColor,
           )
         ]
