@@ -78,6 +78,7 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                       borderRadius: BorderRadius.circular(10.0),
                       child: Image.file(
                         File(widget.imagePath),
+                        height: 400,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -112,44 +113,56 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                         maxLength: 1000,
                         controller: descController,
                       ),
-                      const SizedBox(
-                        height: 70,
-                      ),
                     ],
                   ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                    onPressed: () async {
+                      await addDataToDatabase();
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    }, 
+                    child: Container(
+                      width: 150,
+                      height: 50,
+                      alignment: Alignment.center,
+                      child: Text('Simpan', style: GoogleFonts.poppins(
+                        color: Colors.white
+                      ),),
+                      decoration: BoxDecoration(
+                        color: primaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                        
+                      ),
+                      ),
+                    ),
+                    const SizedBox(width: 10,),
+                    TextButton(
+                    onPressed: () {
+                    Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 150,
+                      height: 50,
+                      alignment: Alignment.center,
+                      child: Text('Hapus', style: GoogleFonts.poppins(
+                        color: Colors.white
+                      ),),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                        
+                      ),
+                      ),
+                    )
+                  ],
                 )
               ],
             ),
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FloatingActionButton.extended(
-                onPressed: () async {
-                  await addDataToDatabase();
-                  Navigator.of(context).popUntil((route) => route.isFirst);
-                },
-                label: const Text('Simpan'),
-                backgroundColor: primaryColor,
-                icon: const Icon(Icons.save),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              FloatingActionButton.extended(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                label: const Text('Hapus'),
-                backgroundColor: Colors.red,
-                icon: const Icon(Icons.delete),
-              ),
-            ],
-          ),
-        ));
+    );
   }
 }
