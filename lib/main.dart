@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kumpulin/screen/home/home_page.dart';
 import 'package:kumpulin/screen/onboarding/onboarding_page.dart';
+import 'package:kumpulin/screen/splash/splash_page.dart';
 import 'package:provider/provider.dart';
 
 import 'models/google_auth.dart';
@@ -20,27 +21,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO : Implement named route for simplify passing data between screen
+    User? user = Provider.of<User?>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: StreamProvider.value(
-        value: userStream,
-        initialData: null,
-        child: const Auth(),
-      ),
+      initialRoute: '/',
+      routes: {'/': (context) => const SplashPage()},
     );
-  }
-}
-
-class Auth extends StatelessWidget {
-  const Auth({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    User? user = Provider.of<User?>(context);
-    return (user != null)
-        ? HomePage(
-            user: user,
-          )
-        : const OnBoardingPage();
   }
 }
