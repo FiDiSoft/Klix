@@ -1,4 +1,4 @@
-package com.example.kumpulin
+package com.ciptateknologi.klix
 
 import io.flutter.embedding.android.FlutterActivity
 
