@@ -1,78 +1,41 @@
 {
   "project_info": {
-    "project_number": "79343727388",
-    "project_id": "kumpulin-project",
-    "storage_bucket": "kumpulin-project.appspot.com"
+    "project_number": "1087636635029",
+    "project_id": "klix-project",
+    "storage_bucket": "klix-project.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:79343727388:android:48da29177276058ceb00d9",
+        "mobilesdk_app_id": "1:1087636635029:android:f36381762b519222e14a9c",
         "android_client_info": {
-          "package_name": "com.example.google_signin_firebase"
+          "package_name": "com.ciptateknologi.klix"
         }
       },
       "oauth_client": [
         {
-          "client_id": "79343727388-s6pfnbp90v8kmenc0jitk2943a4b0q2o.apps.googleusercontent.com",
+          "client_id": "1087636635029-dh39292l89c8gihhl5rt7csm0csiash2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.google_signin_firebase",
-            "certificate_hash": "9becba93701ff4ff96d1dff33ab9667c7eee3050"
+            "package_name": "com.ciptateknologi.klix",
+            "certificate_hash": "b0871a132f2232cae78633e436fcebadc6119c92"
           }
         },
         {
-          "client_id": "79343727388-ngr7ku1t4vbdeaicv8h7v1radtldpds2.apps.googleusercontent.com",
+          "client_id": "1087636635029-de4q370hledbafi2mmqk3hggrbmp0epv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD7weN1ki99Fa7y7YvK6xR35oVa7e_l-xQ"
+          "current_key": "AIzaSyCdjIQKJs5XxXQM5ceFBGVhHqePyfOyGB8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "79343727388-ngr7ku1t4vbdeaicv8h7v1radtldpds2.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:79343727388:android:0d2e22e7c0261bd5eb00d9",
-        "android_client_info": {
-          "package_name": "com.example.kumpulin"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "79343727388-aendln8r34d3n8k667p0bp58va3iqqcj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.kumpulin",
-            "certificate_hash": "9becba93701ff4ff96d1dff33ab9667c7eee3050"
-          }
-        },
-        {
-          "client_id": "79343727388-ngr7ku1t4vbdeaicv8h7v1radtldpds2.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyD7weN1ki99Fa7y7YvK6xR35oVa7e_l-xQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "79343727388-ngr7ku1t4vbdeaicv8h7v1radtldpds2.apps.googleusercontent.com",
+              "client_id": "1087636635029-de4q370hledbafi2mmqk3hggrbmp0epv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
