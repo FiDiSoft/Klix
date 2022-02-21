@@ -45,7 +45,7 @@ class AppBarWidget extends StatelessWidget {
               label: const Text(
                 'Lokasi',
                 style: TextStyle(
-                  color: Color(0xff123D59),
+                  color: Color(0xff333333),
                 ),
               ),
             )

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fluster/fluster.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:kumpulin/constant/theme.dart';
 
 import 'package:kumpulin/models/map_helper.dart';
 import 'package:kumpulin/models/map_marker.dart';
@@ -45,13 +46,13 @@ class _GoogleMapsState extends State<GoogleMaps> {
 
   /// Url image used on normal markers
   final String _markerImageUrl =
-      'https://img.icons8.com/office/80/000000/marker.png';
+      'https://i.ibb.co/6W5CQ9d/marker.png';
 
   /// Color of the cluster circle
-  final Color _clusterColor = Colors.blue;
+  final Color _clusterColor = secondaryColor;
 
   /// Color of the cluster text
-  final Color _clusterTextColor = Colors.white;
+  final Color _clusterTextColor = primaryColor;
 
   /// Example marker coordinates
   // final List<LatLng> _markerLocations = [
@@ -147,7 +148,8 @@ class _GoogleMapsState extends State<GoogleMaps> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Titik lokasi'),
+        backgroundColor: primaryColor,
+        title: const Text('Multiple Plot Location'),
       ),
       body: Stack(
         children: <Widget>[
