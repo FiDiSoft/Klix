@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kumpulin/auth.dart';
 import 'package:kumpulin/models/google_auth.dart';
-import 'package:kumpulin/constant/theme.dart';
 import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {

@@ -9,9 +9,9 @@ class Validators {
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
     if (email.isEmpty) {
-      return 'Email tidak boleh kosong!';
+      return 'Email cannot be empty!';
     } else if (!emailRegExp.hasMatch(email)) {
-      return 'Masukkan email sesuai dengan format!';
+      return 'Enter the email according to the format!';
     }
 
     return null;

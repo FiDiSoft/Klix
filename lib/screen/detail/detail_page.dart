@@ -304,8 +304,8 @@ class _DetailPageState extends State<DetailPage> {
                           TextButton(
                               onPressed: () async {
                                 destroyShared();
-                                await ImgDatabase.instance
-                                    .destroy(widget.image.id!);
+                              await ImgDatabase.instance
+                                    .destroy(widget.image.id!, widget.image.imgPath);
                                 Navigator.of(context)
                                     .popUntil((route) => route.isFirst);
                               },

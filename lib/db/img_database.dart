@@ -72,8 +72,9 @@ class ImgDatabase {
     return query;
   }
 
-  Future<int> destroy(int id) async {
+  Future<int> destroy(int id, String imgPath) async {
     final db = await instance.database;
+    File(imgPath).delete();
     final query = await db
         .delete(imgTable, where: '${ImgFields.id} = ?', whereArgs: [id]);
 

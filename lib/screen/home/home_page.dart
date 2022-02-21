@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: Colors.red,
                 padding: EdgeInsets.all(20),
                 content: Text(
-                  'Silahkan tambahkan gambar!',
+                  'Please add a image!',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: Colors.red,
                 padding: EdgeInsets.all(20),
                 content: Text(
-                  'Daftar gambar sudah penuh!',
+                  'Image list is full!',
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
@@ -190,13 +190,13 @@ class _HomePageState extends State<HomePage> {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: const Text('Hapus semua gambar ?'),
+                            title: const Text('Delete all images?'),
                             content:
-                                const Text('Ini akan menghapus semua gambar'),
+                                const Text('This action will delete all images'),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: const Text('batal'),
+                                child: const Text('cancel'),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -213,7 +213,7 @@ class _HomePageState extends State<HomePage> {
 
                                   Navigator.pop(context);
                                 },
-                                child: const Text('ya'),
+                                child: const Text('yes'),
                               ),
                             ],
                           ),
@@ -225,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                     Future<void> _sendButtonCallback() async {
                       List<Img> _listImg = await ImgDatabase.instance.index();
                       if (_listImg.isEmpty) {
-                        _showSnackbar('Silahkan tambahkan gambar!');
+                        _showSnackbar('Please add a image!');
                       } else {
                         if (_selectedImgProvider.isSelectable) {
                           if (_selectedImgProvider.listImages.length > 0) {
@@ -238,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             );
                           } else {
-                            _showSnackbar("Pilih minimal 1 gambar");
+                            _showSnackbar("Choose at least 1 image");
                           }
                         } else {
                           _selectedImgProvider.statusSelect = true;
@@ -281,7 +281,7 @@ class _HomePageState extends State<HomePage> {
                                           const EdgeInsets.only(bottom: 12),
                                       child: Center(
                                         child: Text(
-                                            'Total gambar : ${snapShot.data!.length.toString()} / 50'),
+                                            'Images : ${snapShot.data!.length.toString()} / 50'),
                                       ),
                                     ),
                                   ]
