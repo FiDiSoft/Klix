@@ -139,14 +139,14 @@ class _DetailPageState extends State<DetailPage> {
             ),
             title: (formProvider.isEdit == false)
                 ? Text(
-                    'Halaman edit',
+                    'Detail Page',
                     style: headingStyle.copyWith(
                       fontSize: 22.0,
                       fontWeight: FontWeight.bold,
                     ),
                   )
                 : Text(
-                    'Halaman detail',
+                    'Detail Page',
                     style: headingStyle.copyWith(
                       fontSize: 22.0,
                       fontWeight: FontWeight.bold,
@@ -174,7 +174,7 @@ class _DetailPageState extends State<DetailPage> {
                   TextFormField(
                     readOnly: formProvider.isEdit,
                     decoration: const InputDecoration(
-                      hintText: 'Deskripsi gambar...',
+                      hintText: 'Type your description...',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(8),
@@ -238,7 +238,7 @@ class _DetailPageState extends State<DetailPage> {
                           backgroundColor: Colors.green,
                           padding: EdgeInsets.all(20),
                           content: Text(
-                            'Berhasil diperbaharui!',
+                            'Updated successfully!',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -283,8 +283,8 @@ class _DetailPageState extends State<DetailPage> {
                         width: 1,
                       ),
                       btnText: (isChecked == false)
-                          ? 'Cek lokasi'
-                          : 'Lokasi sudah dicek',
+                          ? 'Check location'
+                          : 'Location checked',
                       btnTextStyle: bodyTextStyle.copyWith(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
@@ -295,12 +295,12 @@ class _DetailPageState extends State<DetailPage> {
                     onTap: () => showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: const Text('Hapus Data?'),
-                        content: const Text('klik "ya" untuk melanjutkan'),
+                        title: const Text('Delete data ?'),
+                        content: const Text('Tap "yes" to continue'),
                         actions: [
                           TextButton(
                               onPressed: () => Navigator.pop(context),
-                              child: const Text('Kembali')),
+                              child: const Text('Close')),
                           TextButton(
                               onPressed: () async {
                                 destroyShared();
@@ -309,19 +309,19 @@ class _DetailPageState extends State<DetailPage> {
                                 Navigator.of(context)
                                     .popUntil((route) => route.isFirst);
                               },
-                              child: const Text('Ya')),
+                              child: const Text('Yes')),
                         ],
                       ),
                     ),
                     child: BuildButton(
                       btnColor: whiteBackground,
                       btnBorder: Border.all(
-                        color: primaryColor,
+                        color: Colors.red,
                         width: 1,
                       ),
-                      btnText: 'Hapus',
+                      btnText: 'Delete',
                       btnTextStyle: bodyTextStyle.copyWith(
-                          color: primaryColor, fontWeight: FontWeight.bold),
+                          color: Colors.red, fontWeight: FontWeight.bold),
                     ),
                   )
                 ],
