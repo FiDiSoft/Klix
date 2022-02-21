@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/models/google_auth.dart';
@@ -16,14 +17,14 @@ class OnBoardingPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 50),
             child: Column(
               children: [
-                Text("Kumpul-in",
-                    style: headingStyle.copyWith(
-                        color: primaryColor, fontWeight: FontWeight.bold)),
-                Text('Ambil dan Abadikan Fotomu',
+                Text("KLIX",
+                style: headingStyle.copyWith(
+                    color: primaryColor, fontWeight: FontWeight.bold)),
+                Text('Capture and Save your Location',
                     style: bodyTextStyle.copyWith(
-                        color: secondaryColor, fontSize: 16)),
+                        color: accentColor, fontSize: 16)),
                 const SizedBox(height: 70),
-                Lottie.asset('assets/camera.json', width: 250, height: 250),
+                Lottie.asset('assets/point_marker.json', width: 250, height: 250),
                 const SizedBox(
                   height: 70,
                 ),
@@ -46,9 +47,9 @@ class OnBoardingPage extends StatelessWidget {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          'Masuk dengan Google',
+                          'Sign In',
                           style: bodyTextStyle.copyWith(
-                              fontSize: 14, color: Colors.white),
+                              fontSize: 14, color: Colors.white,),
                         )
                       ],
                     ),
@@ -59,7 +60,7 @@ class OnBoardingPage extends StatelessWidget {
                   height: 59,
                   width: 238,
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: secondaryColor,
                       border: Border.all(color: primaryColor),
                       borderRadius: BorderRadius.circular(8)),
                   child: TextButton(
@@ -77,9 +78,9 @@ class OnBoardingPage extends StatelessWidget {
                           width: 10,
                         ),
                         Text(
-                          'Daftar dengan Google',
+                          'Sign Up ',
                           style: bodyTextStyle.copyWith(
-                              fontSize: 14, color: primaryColor),
+                              fontSize: 14, color: baseTextColor),
                         )
                       ],
                     ),

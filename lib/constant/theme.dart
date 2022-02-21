@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Color primaryColor = const Color(0xff123D59);
-Color secondaryColor = const Color(0xffC2D1D9);
+Color primaryColor = const Color(0xff333333);
+Color secondaryColor = const Color(0xffffeb36);
+Color accentColor = const Color(0xff908888);
 Color baseTextColor = const Color(0xff010406);
 Color whiteBackground = const Color(0x00ffffff);
 
@@ -22,3 +23,4 @@ TextStyle labelTextStyle = GoogleFonts.poppins(
   fontSize: 14,
   fontWeight: FontWeight.w400,
 );
+
