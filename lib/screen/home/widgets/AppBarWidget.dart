@@ -73,7 +73,7 @@ class AppBarWidget extends StatelessWidget {
                 ),
               );
             },
-            icon: const Icon(Icons.exit_to_app, color: Color(0xff123D59)),
+            icon: const Icon(Icons.exit_to_app, color: Color(0xff333333)),
           ),
           IconButton(
             onPressed: () {
