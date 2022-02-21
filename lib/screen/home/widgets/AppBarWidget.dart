@@ -26,7 +26,7 @@ class AppBarWidget extends StatelessWidget {
       backgroundColor: statusSelected ? primaryColor : Colors.transparent,
       toolbarHeight: 80,
       title: Text(
-        statusSelected ? "Pilih gambar" : 'Daftar gambar',
+        statusSelected ? "Choose image" : 'List image',
         style: headingStyle.copyWith(
           fontWeight: FontWeight.bold,
           fontSize: 18,
@@ -43,7 +43,7 @@ class AppBarWidget extends StatelessWidget {
                 color: Colors.green,
               ),
               label: const Text(
-                'Lokasi',
+                'Location',
                 style: TextStyle(
                   color: Color(0xff333333),
                 ),
@@ -55,19 +55,19 @@ class AppBarWidget extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text('Keluar '),
-                  content: const Text('Anda yakin akan keluar ?'),
+                  title: const Text('Log out '),
+                  content: const Text('Are you sure to Log out ?'),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('batal'),
+                      child: const Text('cancel'),
                     ),
                     TextButton(
                       onPressed: () async {
                         await signOut();
                         Navigator.pop(context);
                       },
-                      child: const Text('ya'),
+                      child: const Text('yes'),
                     ),
                   ],
                 ),

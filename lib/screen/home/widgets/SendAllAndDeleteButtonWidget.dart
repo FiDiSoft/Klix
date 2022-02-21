@@ -27,7 +27,7 @@ class SendAllAndDeleteButtonWidget extends StatelessWidget {
             width: 1,
             color: primaryColor,
           ),
-          btnText: statusSelect ? "Kirim semua gambar" : 'Hapus semua gambar',
+          btnText: statusSelect ? "Send all image" : 'Delete all image',
           btnTextStyle: bodyTextStyle.copyWith(
             color: primaryColor,
             fontWeight: FontWeight.bold,

@@ -23,7 +23,7 @@ class SendButtonWidget extends StatelessWidget {
         child: BuildButton(
           btnColor: primaryColor,
           btnBorder: Border.all(width: 1),
-          btnText: statusSelect ? 'Kirim yang dipilih gambar' : 'Kirim gambar',
+          btnText: statusSelect ? 'Send the selected image' : 'Send image',
           btnTextStyle: bodyTextStyle.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
