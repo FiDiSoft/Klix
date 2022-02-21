@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/db/img_database.dart';
 import 'package:kumpulin/models/img.dart';
-import 'package:kumpulin/widgets/build_button.dart';
 import 'package:location/location.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
@@ -66,6 +65,13 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
   Widget build(BuildContext context) {
     Size mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('Confirm Photo'),
+        backgroundColor: Colors.white,
+        foregroundColor: primaryColor,
+        shadowColor: Colors.transparent,
+      ),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -78,7 +84,7 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                       borderRadius: BorderRadius.circular(10.0),
                       child: Image.file(
                         File(widget.imagePath),
-                        height: 400,
+                        height: 350,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -91,7 +97,7 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Deskripsi gambar',
+                        'Description',
                         style: labelTextStyle.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -102,8 +108,9 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
-                          hintText: 'Deskripsi gambar...',
+                          hintText: 'Type your description...',
                           border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
                             borderRadius: BorderRadius.all(
                               Radius.circular(8),
                             ),
@@ -128,7 +135,7 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                       width: 150,
                       height: 50,
                       alignment: Alignment.center,
-                      child: Text('Simpan', style: GoogleFonts.poppins(
+                      child: Text('Save', style: GoogleFonts.poppins(
                         color: Colors.white
                       ),),
                       decoration: BoxDecoration(
@@ -147,12 +154,13 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                       width: 150,
                       height: 50,
                       alignment: Alignment.center,
-                      child: Text('Hapus', style: GoogleFonts.poppins(
-                        color: Colors.white
+                      child: Text('Delete', style: GoogleFonts.poppins(
+                        color:primaryColor
                       ),),
                       decoration: BoxDecoration(
-                        color: Colors.red,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: primaryColor)
                         
                       ),
                       ),
