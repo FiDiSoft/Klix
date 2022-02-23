@@ -37,7 +37,7 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
         body: SafeArea(
       child: Center(
-        child: Image.asset('assets/logo-app.png', width: 250, height:250)
+        child: Image.asset('assets/cipta_logo.jpeg', width: 250, height:250)
       ),
     ));
   }
