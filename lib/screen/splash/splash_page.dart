@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:kumpulin/auth.dart';
+import 'package:kumpulin/constant/theme.dart';
 import 'package:kumpulin/models/google_auth.dart';
 import 'package:provider/provider.dart';
 
@@ -37,8 +38,19 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
         body: SafeArea(
       child: Center(
-        child: Image.asset('assets/logo-app.png', width: 250, height:250)
-      ),
+          child: Column(
+        children: [
+          const SizedBox(
+            height: 220,
+          ),
+          Image.asset('assets/logo-app.png', width: 250, height: 250),
+          Text(
+            "KLIX",
+            style: headingStyle.copyWith(
+                color: primaryColor, fontWeight: FontWeight.bold),
+          )
+        ],
+      )),
     ));
   }
 }
