@@ -24,7 +24,8 @@ class OnBoardingPage extends StatelessWidget {
                     style: bodyTextStyle.copyWith(
                         color: accentColor, fontSize: 16)),
                 const SizedBox(height: 70),
-                Lottie.asset('assets/point_marker.json', width: 250, height: 250),
+                Image.asset('assets/logo-app.png', width: 250, height: 250,),
+                // Lottie.asset('assets/point_marker.json', width: 250, height: 250),
                 const SizedBox(
                   height: 70,
                 ),
