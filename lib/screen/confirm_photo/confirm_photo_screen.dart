@@ -72,105 +72,106 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
         foregroundColor: primaryColor,
         shadowColor: Colors.transparent,
       ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0)),
-                    margin: const EdgeInsets.all(10.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.file(
-                        File(widget.imagePath),
-                        height: 350,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                Container(
-                  width: mediaQuery.width,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Description',
-                        style: labelTextStyle.copyWith(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Type your description...',
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                          ),
-                        ),
-                        maxLines: 5,
-                        maxLength: 1000,
-                        controller: descController,
-                      ),
-                    ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                margin: const EdgeInsets.all(10.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Image.file(
+                    File(widget.imagePath),
+                    height: 350,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              ),
+              Container(
+                width: mediaQuery.width,
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextButton(
-                    onPressed: () async {
-                      await addDataToDatabase();
-                      Navigator.of(context).popUntil((route) => route.isFirst);
-                    }, 
-                    child: Container(
-                      width: 150,
-                      height: 50,
-                      alignment: Alignment.center,
-                      child: Text('Save', style: GoogleFonts.poppins(
-                        color: Colors.white
-                      ),),
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(10),
-                        
-                      ),
+                    Text(
+                      'Description',
+                      style: labelTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(width: 10,),
-                    TextButton(
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'Type your description...',
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                        ),
+                      ),
+                      maxLines: 5,
+                      maxLength: 1000,
+                      controller: descController,
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
                     onPressed: () {
-                    Navigator.pop(context);
+                      Navigator.pop(context);
                     },
                     child: Container(
                       width: 150,
                       height: 50,
                       alignment: Alignment.center,
-                      child: Text('Delete', style: GoogleFonts.poppins(
-                        color:primaryColor
-                      ),),
+                      child: Text(
+                        'Delete',
+                        style: GoogleFonts.poppins(color: primaryColor),
+                      ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: primaryColor)),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      await addDataToDatabase();
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    },
+                    child: Container(
+                      width: 150,
+                      height: 50,
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Save',
+                        style: GoogleFonts.poppins(color: Colors.white),
+                      ),
+                      decoration: BoxDecoration(
+                        color: primaryColor,
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: primaryColor)
-                        
                       ),
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
+                    ),
+                  ),
+                ],
+              )
+            ],
           ),
         ),
+      ),
     );
   }
 }

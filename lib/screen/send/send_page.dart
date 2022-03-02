@@ -51,7 +51,7 @@ class _SendPageState extends State<SendPage> {
           ),
         ),
         title: Text(
-          'Halaman Kirim',
+          'Send page',
           style: headingStyle.copyWith(
             fontSize: 22.0,
             fontWeight: FontWeight.bold,
@@ -72,7 +72,7 @@ class _SendPageState extends State<SendPage> {
                       validator: (email) =>
                           Validators.validateEmail(email: email.toString()),
                       decoration: const InputDecoration(
-                        hintText: 'Masukkan email penerima',
+                        hintText: 'Add email recipient',
                         labelText: 'Email',
                         labelStyle: TextStyle(fontSize: 18),
                         border: OutlineInputBorder(
@@ -120,7 +120,7 @@ class _SendPageState extends State<SendPage> {
                             backgroundColor: Colors.green,
                             padding: EdgeInsets.all(20),
                             content: Text(
-                              'Data berhasil terkirim!',
+                              'Data sent successfully ',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
@@ -136,7 +136,7 @@ class _SendPageState extends State<SendPage> {
                         color: primaryColor,
                         width: 1,
                       ),
-                      btnText: 'Kirim File',
+                      btnText: 'Send File',
                       btnTextStyle: bodyTextStyle.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

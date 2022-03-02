@@ -75,7 +75,7 @@ class _DetailPageState extends State<DetailPage> {
       try {
         final coords = Coords(double.parse(latController.text),
             double.parse(longController.text));
-        const title = "Koordinat gambar";
+        const title = "Coordinate picture";
         final availableMaps = await MapLauncher.installedMaps;
 
         showModalBottomSheet(
@@ -89,7 +89,7 @@ class _DetailPageState extends State<DetailPage> {
                       Container(
                         margin: const EdgeInsets.all(10.0),
                         child: Text(
-                          'Pilih maps',
+                          'Select maps',
                           style: bodyTextStyle.copyWith(fontSize: 20),
                         ),
                       ),
@@ -304,8 +304,8 @@ class _DetailPageState extends State<DetailPage> {
                           TextButton(
                               onPressed: () async {
                                 destroyShared();
-                              await ImgDatabase.instance
-                                    .destroy(widget.image.id!, widget.image.imgPath);
+                                await ImgDatabase.instance.destroy(
+                                    widget.image.id!, widget.image.imgPath);
                                 Navigator.of(context)
                                     .popUntil((route) => route.isFirst);
                               },
