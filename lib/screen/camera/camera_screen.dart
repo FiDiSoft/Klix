@@ -78,7 +78,7 @@ class _CameraScreenState extends State<CameraScreen> {
           backgroundColor: Colors.red,
           padding: EdgeInsets.all(20),
           content: Text(
-            'Mohon ulangi pengambilan gambar',
+            'Please re-capture image',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           duration: Duration(seconds: 2),
